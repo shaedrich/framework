@@ -289,6 +289,23 @@ class Builder
     }
 
     /**
+     * Execute the query and get the first result or throw an exception.
+     *
+     * @param  array  $columns
+     * @return \Illuminate\Database\Eloquent\Model|static
+     *
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     */
+    public function firstWhereOrFail($column, $operator = null, $value = null, $boolean = 'and')
+    {
+        if (! is_null($model = $this->firstWhere($column, $operator, $value, $boolean))) {
+            return $model;
+        }
+
+        throw (new ModelNotFoundException)->setModel(get_class($this->model));
+    }
+
+    /**
      * Add an "or where" clause to the query.
      *
      * @param  \Closure|array|string|\Illuminate\Database\Query\Expression  $column
