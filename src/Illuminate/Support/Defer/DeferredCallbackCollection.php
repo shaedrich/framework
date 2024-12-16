@@ -19,7 +19,7 @@ use Illuminate\Support\Traits\ForwardsCalls;
  * @template TValue
  * @template TCollection of \Illuminate\Support\Collection<TKey, TValue>
  */
-class DeferredCallbackCollection implements ArrayAccess, Countable
+class DeferredCallbackCollection
 {
     use ForwardsCalls;
 
