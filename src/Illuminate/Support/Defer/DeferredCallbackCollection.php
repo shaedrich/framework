@@ -9,12 +9,15 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Traits\ForwardsCalls;
 
 /**
- * @method bool offsetExists(mixed $offset) Determine if the collection has a callback with the given key.
- * @method mixed offsetGet(mixed $offset) Get the callback with the given key.
- * @method void offsetSet(mixed $offset, mixed $value) Set the callback with the given key.
- * @method void offsetUnset(mixed $offset) Remove the callback with the given key from the collection.
- * @method void forget(string $name) Remove any deferred callbacks with the given name.
+ * @method bool offsetExists(TKey $offset) Determine if the collection has a callback with the given key.
+ * @method TValue offsetGet(TKey $offset) Get the callback with the given key.
+ * @method void offsetSet(TKey $offset, TValue $value) Set the callback with the given key.
+ * @method void offsetUnset(TKey $offset) Remove the callback with the given key from the collection.
+ * @method void forget(TKey $name) Remove any deferred callbacks with the given name.
  * @method int count() Determine how many callbacks are in the collection.
+ * @template TKey
+ * @template TValue
+ * @template TCollection of \Illuminate\Support\Collection<TKey, TValue>
  */
 class DeferredCallbackCollection implements ArrayAccess, Countable
 {
@@ -28,7 +31,7 @@ class DeferredCallbackCollection implements ArrayAccess, Countable
     /**
      * All of the deferred callbacks.
      *
-     * @var array
+     * @var TCollection
      */
     protected Collection $callbacks;
 
