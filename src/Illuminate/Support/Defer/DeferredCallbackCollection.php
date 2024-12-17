@@ -5,16 +5,33 @@ namespace Illuminate\Support\Defer;
 use ArrayAccess;
 use Closure;
 use Countable;
-use Illuminate\Support\Collection;
+use Illuminate\Support\Traits\CollectionArrayAccess;
+use Illuminate\Support\Traits\CountCollection;
 
+
+/**
+ * @template TKey of array-key
+ *
+ * @template-covariant TValue
+ */
 class DeferredCallbackCollection implements ArrayAccess, Countable
 {
+    /**
+     * @use \Illuminate\Support\Traits\CollectionArrayAccess<TKey, TValue>
+     */
+    use CountCollection, CollectionArrayAccess {
+        CountCollection::count as private _count;
+        CollectionArrayAccess::offsetExists as private _exists;
+        CollectionArrayAccess::offsetGet as private _get;
+        CollectionArrayAccess::offsetUnset as private _unset;
+    }
+
     /**
      * All of the deferred callbacks.
      *
      * @var array
      */
-    protected array $callbacks = [];
+    protected array $items = [];
 
     /**
      * Get the first callback in the collection.
@@ -23,7 +40,7 @@ class DeferredCallbackCollection implements ArrayAccess, Countable
      */
     public function first()
     {
-        return array_values($this->callbacks)[0];
+        return array_values($this->items)[0];
     }
 
     /**
@@ -48,12 +65,12 @@ class DeferredCallbackCollection implements ArrayAccess, Countable
 
         $this->forgetDuplicates();
 
-        foreach ($this->callbacks as $index => $callback) {
+        foreach ($this->items as $index => $callback) {
             if ($when($callback)) {
                 rescue($callback);
             }
 
-            unset($this->callbacks[$index]);
+            self::_unset($index);
         }
     }
 
@@ -65,7 +82,7 @@ class DeferredCallbackCollection implements ArrayAccess, Countable
      */
     public function forget(string $name): void
     {
-        $this->callbacks = (new Collection($this->callbacks))
+        $this->items = (new Collection($this->callbacks))
             ->reject(fn ($callback) => $callback->name === $name)
             ->values()
             ->all();
@@ -98,7 +115,7 @@ class DeferredCallbackCollection implements ArrayAccess, Countable
     {
         $this->forgetDuplicates();
 
-        return isset($this->callbacks[$offset]);
+        return self::_exists($offset);
     }
 
     /**
@@ -111,23 +128,7 @@ class DeferredCallbackCollection implements ArrayAccess, Countable
     {
         $this->forgetDuplicates();
 
-        return $this->callbacks[$offset];
-    }
-
-    /**
-     * Set the callback with the given key.
-     *
-     * @param  mixed  $offset
-     * @param  mixed  $value
-     * @return void
-     */
-    public function offsetSet(mixed $offset, mixed $value): void
-    {
-        if (is_null($offset)) {
-            $this->callbacks[] = $value;
-        } else {
-            $this->callbacks[$offset] = $value;
-        }
+        return self::_get($offset);
     }
 
     /**
@@ -140,7 +141,7 @@ class DeferredCallbackCollection implements ArrayAccess, Countable
     {
         $this->forgetDuplicates();
 
-        unset($this->callbacks[$offset]);
+        self::_unset($offset);
     }
 
     /**
@@ -152,6 +153,6 @@ class DeferredCallbackCollection implements ArrayAccess, Countable
     {
         $this->forgetDuplicates();
 
-        return count($this->callbacks);
+        return self::_count();
     }
 }

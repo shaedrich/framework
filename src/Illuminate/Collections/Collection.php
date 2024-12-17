@@ -5,6 +5,8 @@ namespace Illuminate\Support;
 use ArrayAccess;
 use ArrayIterator;
 use Illuminate\Contracts\Support\CanBeEscapedWhenCastToString;
+use Illuminate\Support\Traits\CollectionArrayAccess;
+use Illuminate\Support\Traits\CountCollection;
 use Illuminate\Support\Traits\EnumeratesValues;
 use Illuminate\Support\Traits\Macroable;
 use InvalidArgumentException;
@@ -23,8 +25,9 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, Enumerabl
 {
     /**
      * @use \Illuminate\Support\Traits\EnumeratesValues<TKey, TValue>
+     * @use \Illuminate\Support\Traits\CollectionArrayAccess<TKey, TValue>
      */
-    use EnumeratesValues, Macroable;
+    use EnumeratesValues, CollectionArrayAccess, CountCollection, Macroable;
 
     /**
      * The items contained in the collection.
@@ -1822,16 +1825,6 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, Enumerabl
     }
 
     /**
-     * Count the number of items in the collection.
-     *
-     * @return int
-     */
-    public function count(): int
-    {
-        return count($this->items);
-    }
-
-    /**
      * Count the number of items in the collection by a field or using a callback.
      *
      * @param  (callable(TValue, TKey): array-key)|string|null  $countBy
@@ -1863,54 +1856,5 @@ class Collection implements ArrayAccess, CanBeEscapedWhenCastToString, Enumerabl
     public function toBase()
     {
         return new self($this);
-    }
-
-    /**
-     * Determine if an item exists at an offset.
-     *
-     * @param  TKey  $key
-     * @return bool
-     */
-    public function offsetExists($key): bool
-    {
-        return isset($this->items[$key]);
-    }
-
-    /**
-     * Get an item at a given offset.
-     *
-     * @param  TKey  $key
-     * @return TValue
-     */
-    public function offsetGet($key): mixed
-    {
-        return $this->items[$key];
-    }
-
-    /**
-     * Set the item at a given offset.
-     *
-     * @param  TKey|null  $key
-     * @param  TValue  $value
-     * @return void
-     */
-    public function offsetSet($key, $value): void
-    {
-        if (is_null($key)) {
-            $this->items[] = $value;
-        } else {
-            $this->items[$key] = $value;
-        }
-    }
-
-    /**
-     * Unset the item at a given offset.
-     *
-     * @param  TKey  $key
-     * @return void
-     */
-    public function offsetUnset($key): void
-    {
-        unset($this->items[$key]);
     }
 }
