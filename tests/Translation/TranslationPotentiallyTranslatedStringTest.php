@@ -6,7 +6,6 @@ use Illuminate\Translation\ArrayLoader;
 use Illuminate\Translation\PotentiallyTranslatedString;
 use Illuminate\Translation\Translator;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\Attributes\TestWith;
 
 class TranslationPotentiallyTranslatedStringTest extends TestCase
 {
