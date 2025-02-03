@@ -234,7 +234,7 @@ class Number
             case $number < 0:
                 return sprintf('-%s', static::summarize(abs($number), $precision, $maxPrecision, $units));
             case $number >= 1e15:
-                return sprintf('%s'.end($units), static::summarize($number / 1e15, $precision, $maxPrecision, $units));
+                return sprintf('%s' . end($units), static::summarize($number / 1e15, $precision, $maxPrecision, $units));
         }
 
         $numberExponent = floor(log10($number));
@@ -283,6 +283,80 @@ class Number
     }
 
     /**
+     * @param  'e'|'normalized'|'engineering'|'standard'  $style
+     */
+    public static function toScientificNotation(
+        int|float $value,
+        string $style = 'e',
+        bool $positiveSign = false,
+        int|null $precision = null,
+        string|null $locale = null,
+    ): string { // TODO: Other formats: scientific (3×10^2), normalized (exponent between 1 and 10), engineering (divisable by three to match SI units (1000))
+        if ($style === 'e') {
+            return static::toENotation($value, $positiveSign, $precision, $locale);
+        }
+
+        if ($precision === null) { // TODO: Use for both, when `$precision` is `null`
+            [$rest, $exponent] = self::determineExponentForScientificNotation(
+                $value,
+                $style === 'normalized' ? 10 : null,
+                $style === 'normalized' ? 10 : null,
+                $style === 'engineering' ? 3 : null,
+            );
+        } else {
+            $rest = $value / (10 ** ($precision - 1));
+            $exponent = $precision - 1;
+        }
+
+        return $rest . '×10' . ($exponent > 1 ? match ($exponent) {
+            0 => "\u{2070}",
+            1 => "\u{00B9}",
+            2 => "\u{00B2}",
+            3 => "\u{00B3}",
+            4 => "\u{2074}",
+            5 => "\u{2075}",
+            6 => "\u{2076}",
+            7 => "\u{2077}",
+            8 => "\u{2078}",
+            9 => "\u{2079}",
+        } : '');
+    }
+
+    /**
+     * @return  array{int|float, int}
+     */
+    private static function determineExponentForScientificNotation(int|float $value, int|null $min, int|null $max, int|null $step): array
+    {
+        $rest = $value;
+        $exponent = 0;
+        $pow = $step ?? 1;
+        do {
+            $rest /= (10 ** $pow);
+            $exponent += $pow;
+        } while (is_int($rest) && ($min === null || $exponent >= $min) && ($max === null || $exponent <= $max));
+        return [$rest, $exponent];
+    }
+
+    public static function toENotation(
+        int|float $value,
+        bool $positiveSign = false,
+        int|null $precision = null, // TODO: Pick good default
+        string|null $locale = null,
+    ): string {
+        $formatter = new NumberFormatter($locale ?? static::$locale, NumberFormatter::SCIENTIFIC);
+
+        if ($precision !== null) {
+            $formatter->setAttribute(NumberFormatter::INTEGER_DIGITS, $precision);
+        }
+
+        if ($positiveSign) {
+            $formatter->setTextAttribute(NumberFormatter::POSITIVE_PREFIX, '+');
+        }
+
+        return $formatter->format($value);
+    }
+
+    /**
      * Remove any trailing zero digits after the decimal point of the given number.
      *
      * @param  int|float  $number
@@ -306,7 +380,7 @@ class Number
 
         static::useLocale($locale);
 
-        return tap($callback(), fn () => static::useLocale($previousLocale));
+        return tap($callback(), fn() => static::useLocale($previousLocale));
     }
 
     /**
@@ -322,7 +396,7 @@ class Number
 
         static::useCurrency($currency);
 
-        return tap($callback(), fn () => static::useCurrency($previousCurrency));
+        return tap($callback(), fn() => static::useCurrency($previousCurrency));
     }
 
     /**
@@ -377,7 +451,7 @@ class Number
         if (! extension_loaded('intl')) {
             $method = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1]['function'];
 
-            throw new RuntimeException('The "intl" PHP extension is required to use the ['.$method.'] method.');
+            throw new RuntimeException('The "intl" PHP extension is required to use the [' . $method . '] method.');
         }
     }
 }

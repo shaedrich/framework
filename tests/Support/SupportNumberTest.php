@@ -3,6 +3,7 @@
 namespace Illuminate\Tests\Support;
 
 use Illuminate\Support\Number;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\RequiresPhpExtension;
 use PHPUnit\Framework\TestCase;
 
@@ -321,5 +322,21 @@ class SupportNumberTest extends TestCase
         $this->assertSame(12.3, Number::trim(12.30));
         $this->assertSame(12.3456789, Number::trim(12.3456789));
         $this->assertSame(12.3456789, Number::trim(12.34567890000));
+    }
+
+    #[DataProvider('providesNumbersForScientificNotation')]
+    public function testToScientificNotation(int|float $input, string $output, string $style = 'standard', $precision = null)
+    {
+        $this->assertSame(Number::toScientificNotation($input, $style, precision: $precision), $output);
+    }
+
+    public static function providesNumbersForScientificNotation()
+    {
+        return [
+            'scientific notation with default precision' => [120, '1.2E2'],
+            'scientific notation with custom precision of 2' => [120, '12E1', 'standard', 2],
+            'normalized notation with default precision' => [120, '12E1', 'normalized'],
+            'engineering notation with default precision of 2' => [120, '12E1', 'engineering'],
+        ];
     }
 }
