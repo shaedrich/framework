@@ -102,14 +102,44 @@ class PendingBatch
                 return;
             }
 
-            if (! (static::$batchableClasses[$job::class] ?? false) && ! in_array(Batchable::class, class_uses_recursive($job))) {
-                static::$batchableClasses[$job::class] = false;
+            if (! (static::$batchableClasses[$job::class] ?? false)) {
+                array_reduce(array_keys($classes = $this->classes_use_recursive($job)), function ($throw, $class) use ($classes) {
+                    static::$batchableClasses[$class] = in_array(Batchable::class, $classes[$class]);
+                }, true);
+                foreach ($this->classes_use_recursive($job) as $class => $traits) {
+                    static::$batchableClasses[$class] = in_array(Batchable::class, $traits);
+                }
 
-                throw new RuntimeException(sprintf('Attempted to batch job [%s], but it does not use the Batchable trait.', $job::class));
+                static::$batchableClasses[$job::class] ??= false;
+
+                if (! static::$batchableClasses[$job::class]) {
+                    throw new RuntimeException(sprintf('Attempted to batch job [%s], but it does not use the Batchable trait.', $job::class));
+                }
             }
-
-            static::$batchableClasses[$job::class] = true;
         }
+    }
+
+    /**
+     * Returns all traits used by a class, its parent classes and trait of their traits.
+     *
+     * @param  object|string  $class
+     * @return array
+     */
+    protected function classes_use_recursive($class)
+    {
+        if (is_object($class)) {
+            $class = get_class($class);
+        }
+    
+        $results = [];
+        $all = [];
+    
+        foreach (array_reverse(class_parents($class) ?: []) + [$class => $class] as $class) {
+            $all += trait_uses_recursive($class);
+            $results[$class] = array_unique([ ...$all, ...trait_uses_recursive($class) ]);
+        }
+    
+        return array_filter($results);
     }
 
     /**
