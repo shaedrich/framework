@@ -103,9 +103,6 @@ class PendingBatch
             }
 
             if (! (static::$batchableClasses[$job::class] ?? false)) {
-                array_reduce(array_keys($classes = $this->classes_use_recursive($job)), function ($throw, $class) use ($classes) {
-                    static::$batchableClasses[$class] = in_array(Batchable::class, $classes[$class]);
-                }, true);
                 foreach ($this->classes_use_recursive($job) as $class => $traits) {
                     static::$batchableClasses[$class] = in_array(Batchable::class, $traits);
                 }
