@@ -103,9 +103,10 @@ class PendingBatch
             }
 
             if (! (static::$batchableClasses[$job::class] ?? false)) {
-                foreach ($this->classes_use_recursive($job) as $class => $traits) {
-                    static::$batchableClasses[$class] ??= in_array(Batchable::class, $traits);
-                }
+                static::$batchableClasses = array_merge(
+                    static::$batchableClasses,
+                    $this->implements_batchable_recursive($job),
+                );
 
                 if (! static::$batchableClasses[$job::class]) {
                     throw new RuntimeException(sprintf('Attempted to batch job [%s], but it does not use the Batchable trait.', $job::class));
@@ -120,18 +121,20 @@ class PendingBatch
      * @param  object|string  $class
      * @return array
      */
-    protected function classes_use_recursive($class)
+    protected function implements_batchable_recursive($class)
     {
         if (is_object($class)) {
             $class = get_class($class);
         }
     
         $results = [];
-        $all = [];
+        $implementsBatchable = false;
     
         foreach (array_reverse(class_parents($class) ?: []) + [$class => $class] as $class) {
-            $all += trait_uses_recursive($class);
-            $results[$class] = array_unique([ ...$all, ...trait_uses_recursive($class) ]);
+            if (!$implementsBatchable && in_array(Batchable::class, trait_uses_recursive($class))) {
+                $implementsBatchable = true;
+            }
+            $results[$class] = $implementsBatchable;
         }
     
         return $results;
