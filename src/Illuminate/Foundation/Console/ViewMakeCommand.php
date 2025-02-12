@@ -51,7 +51,7 @@ class ViewMakeCommand extends GeneratorCommand
 
         return str_replace(
             '{{ quote }}',
-            Inspiring::quotes()->random(),
+            Inspiring::randomQuote(),
             $contents,
         );
     }

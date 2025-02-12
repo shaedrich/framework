@@ -101,7 +101,7 @@ class MailMakeCommand extends GeneratorCommand
 
         $stub = str_replace(
             '{{ quote }}',
-            Inspiring::quotes()->random(),
+            Inspiring::randomQuote(),
             file_get_contents(__DIR__.'/stubs/view.stub')
         );
 
