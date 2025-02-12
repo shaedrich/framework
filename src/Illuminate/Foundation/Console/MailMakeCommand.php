@@ -60,6 +60,23 @@ class MailMakeCommand extends GeneratorCommand
         }
     }
 
+    protected function write(string $type, string $content)
+    {
+        $path = $this->viewPath(
+            str_replace('.', '/', $this->getView()).'.blade.php'
+        );
+
+        if ($this->files->exists($path)) {
+            return $this->components->error(sprintf('%s [%s] already exists.', $type, $path));
+        }
+
+        $this->files->ensureDirectoryExists(dirname($path));
+
+        $this->files->put($path, $content);
+
+        $this->components->info(sprintf('%s [%s] created successfully.', $type, $path));
+    }
+
     /**
      * Write the Markdown template for the mailable.
      *
@@ -67,19 +84,7 @@ class MailMakeCommand extends GeneratorCommand
      */
     protected function writeMarkdownTemplate()
     {
-        $path = $this->viewPath(
-            str_replace('.', '/', $this->getView()).'.blade.php'
-        );
-
-        if ($this->files->exists($path)) {
-            return $this->components->error(sprintf('%s [%s] already exists.', 'Markdown view', $path));
-        }
-
-        $this->files->ensureDirectoryExists(dirname($path));
-
-        $this->files->put($path, file_get_contents(__DIR__.'/stubs/markdown.stub'));
-
-        $this->components->info(sprintf('%s [%s] created successfully.', 'Markdown view', $path));
+        $this->write('Markdown view', file_get_contents(__DIR__.'/stubs/markdown.stub'));
     }
 
     /**
@@ -89,25 +94,13 @@ class MailMakeCommand extends GeneratorCommand
      */
     protected function writeView()
     {
-        $path = $this->viewPath(
-            str_replace('.', '/', $this->getView()).'.blade.php'
-        );
-
-        if ($this->files->exists($path)) {
-            return $this->components->error(sprintf('%s [%s] already exists.', 'View', $path));
-        }
-
-        $this->files->ensureDirectoryExists(dirname($path));
-
         $stub = str_replace(
             '{{ quote }}',
             Inspiring::quotes()->random(),
             file_get_contents(__DIR__.'/stubs/view.stub')
         );
 
-        $this->files->put($path, $stub);
-
-        $this->components->info(sprintf('%s [%s] created successfully.', 'View', $path));
+        $this->write('View', $stub);
     }
 
     /**
@@ -144,7 +137,7 @@ class MailMakeCommand extends GeneratorCommand
             $name = str_replace('\\', '/', $this->argument('name'));
 
             $view = 'mail.'.(new Collection(explode('/', $name)))
-                ->map(fn ($part) => Str::kebab($part))
+                ->map(Str::kebab(...))
                 ->implode('.');
         }
 
@@ -158,15 +151,13 @@ class MailMakeCommand extends GeneratorCommand
      */
     protected function getStub()
     {
-        if ($this->option('markdown') !== false) {
-            return $this->resolveStubPath('/stubs/markdown-mail.stub');
+        $stub = match (true) {
+            $this->option('markdown') !== false => 'markdown-mail',
+            $this->option('view') !== false => 'view-mail',
+            default => 'mail',
         }
 
-        if ($this->option('view') !== false) {
-            return $this->resolveStubPath('/stubs/view-mail.stub');
-        }
-
-        return $this->resolveStubPath('/stubs/mail.stub');
+        return $this->resolveStubPath('/stubs/' . $stub . '.stub');
     }
 
     /**
