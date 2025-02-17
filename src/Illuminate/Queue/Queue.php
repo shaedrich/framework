@@ -191,7 +191,7 @@ abstract class Queue
             return;
         }
 
-        if (is_null($tries = $job->tries ?? $job->tries())) {
+        if (($tries = $job->tries ?? $job->tries()) === null) {
             return;
         }
 
@@ -210,7 +210,7 @@ abstract class Queue
             return;
         }
 
-        if (is_null($backoff = $job->backoff ?? $job->backoff())) {
+        if (($backoff = $job->backoff ?? $job->backoff()) === null) {
             return;
         }
 
@@ -283,7 +283,7 @@ abstract class Queue
      */
     public static function createPayloadUsing($callback)
     {
-        if (is_null($callback)) {
+        if ($callback === null) {
             static::$createPayloadCallbacks = [];
         } else {
             static::$createPayloadCallbacks[] = $callback;
@@ -371,7 +371,7 @@ abstract class Queue
     protected function raiseJobQueueingEvent($queue, $job, $payload, $delay)
     {
         if ($this->container->bound('events')) {
-            $delay = ! is_null($delay) ? $this->secondsUntil($delay) : $delay;
+            $delay = $delay !== null ? $this->secondsUntil($delay) : $delay;
 
             $this->container['events']->dispatch(new JobQueueing($this->connectionName, $queue, $job, $payload, $delay));
         }
@@ -390,7 +390,7 @@ abstract class Queue
     protected function raiseJobQueuedEvent($queue, $jobId, $job, $payload, $delay)
     {
         if ($this->container->bound('events')) {
-            $delay = ! is_null($delay) ? $this->secondsUntil($delay) : $delay;
+            $delay = $delay !== null ? $this->secondsUntil($delay) : $delay;
 
             $this->container['events']->dispatch(new JobQueued($this->connectionName, $queue, $jobId, $job, $payload, $delay));
         }

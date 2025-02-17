@@ -36,7 +36,7 @@ class JobRetryRequested
      */
     public function payload()
     {
-        if (is_null($this->payload)) {
+        if ($this->payload === null) {
             $this->payload = json_decode($this->job->payload, true);
         }
 

@@ -40,7 +40,7 @@ class CacheLock extends Lock
             );
         }
 
-        if (! is_null($this->store->get($this->name))) {
+        if ($this->store->get($this->name) !== null) {
             return false;
         }
 

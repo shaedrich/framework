@@ -62,7 +62,7 @@ class UploadedFile extends SymfonyUploadedFile
      */
     public function storePubliclyAs($path, $name = null, $options = [])
     {
-        if (is_null($name) || is_array($name)) {
+        if ($name === null || is_array($name)) {
             [$path, $name, $options] = ['', $path, $name ?? []];
         }
 
@@ -83,7 +83,7 @@ class UploadedFile extends SymfonyUploadedFile
      */
     public function storeAs($path, $name = null, $options = [])
     {
-        if (is_null($name) || is_array($name)) {
+        if ($name === null || is_array($name)) {
             [$path, $name, $options] = ['', $path, $name ?? []];
         }
 

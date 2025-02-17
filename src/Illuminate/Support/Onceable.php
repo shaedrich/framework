@@ -31,7 +31,7 @@ class Onceable
      */
     public static function tryFromTrace(array $trace, callable $callable)
     {
-        if (! is_null($hash = static::hashFromTrace($trace, $callable))) {
+        if (($hash = static::hashFromTrace($trace, $callable)) !== null) {
             $object = static::objectFromTrace($trace);
 
             return new static($hash, $object, $callable);

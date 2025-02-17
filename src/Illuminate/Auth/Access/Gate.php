@@ -272,7 +272,7 @@ class Gate implements GateContract
                 $policy, $user, $ability, $arguments
             );
 
-            if (! is_null($result)) {
+            if ($result !== null) {
                 return $result;
             }
 
@@ -444,7 +444,7 @@ class Gate implements GateContract
             $user, $ability, $arguments
         );
 
-        if (is_null($result)) {
+        if ($result === null) {
             $result = $this->callAuthCallback($user, $ability, $arguments);
         }
 
@@ -468,11 +468,11 @@ class Gate implements GateContract
      */
     protected function canBeCalledWithUser($user, $class, $method = null)
     {
-        if (! is_null($user)) {
+        if ($user !== null) {
             return true;
         }
 
-        if (! is_null($method)) {
+        if ($method !== null) {
             return $this->methodAllowsGuests($class, $method);
         }
 
@@ -535,7 +535,7 @@ class Gate implements GateContract
     protected function parameterAllowsGuests($parameter)
     {
         return ($parameter->hasType() && $parameter->allowsNull()) ||
-               ($parameter->isDefaultValueAvailable() && is_null($parameter->getDefaultValue()));
+               ($parameter->isDefaultValueAvailable() && $parameter->getDefaultValue() === null);
     }
 
     /**
@@ -568,7 +568,7 @@ class Gate implements GateContract
                 continue;
             }
 
-            if (! is_null($result = $before($user, $ability, $arguments))) {
+            if (($result = $before($user, $ability, $arguments)) === null) {
                 return $result;
             }
         }

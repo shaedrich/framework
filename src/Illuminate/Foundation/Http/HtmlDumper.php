@@ -123,13 +123,13 @@ class HtmlDumper extends BaseHtmlDumper
      */
     protected function getDumpSourceContent()
     {
-        if (is_null($dumpSource = $this->resolveDumpSource())) {
+        if (($dumpSource = $this->resolveDumpSource()) === null) {
             return '';
         }
 
         [$file, $relativeFile, $line] = $dumpSource;
 
-        $source = sprintf('%s%s', $relativeFile, is_null($line) ? '' : ":$line");
+        $source = sprintf('%s%s', $relativeFile, $line === null ? '' : ":$line");
 
         if ($href = $this->resolveSourceHref($file, $line)) {
             $source = sprintf('<a href="%s">%s</a>', $href, $source);

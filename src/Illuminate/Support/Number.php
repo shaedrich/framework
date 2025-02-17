@@ -39,9 +39,9 @@ class Number
 
         $formatter = new NumberFormatter($locale ?? static::$locale, NumberFormatter::DECIMAL);
 
-        if (! is_null($maxPrecision)) {
+        if ($maxPrecision !== null) {
             $formatter->setAttribute(NumberFormatter::MAX_FRACTION_DIGITS, $maxPrecision);
-        } elseif (! is_null($precision)) {
+        } elseif ($precision !== null) {
             $formatter->setAttribute(NumberFormatter::FRACTION_DIGITS, $precision);
         }
 
@@ -61,11 +61,11 @@ class Number
     {
         static::ensureIntlExtensionIsInstalled();
 
-        if (! is_null($after) && $number <= $after) {
+        if ($after !== null && $number <= $after) {
             return static::format($number, locale: $locale);
         }
 
-        if (! is_null($until) && $number >= $until) {
+        if ($until !== null && $number >= $until) {
             return static::format($number, locale: $locale);
         }
 
@@ -123,7 +123,7 @@ class Number
 
         $formatter = new NumberFormatter($locale ?? static::$locale, NumberFormatter::PERCENT);
 
-        if (! is_null($maxPrecision)) {
+        if ($maxPrecision !== null) {
             $formatter->setAttribute(NumberFormatter::MAX_FRACTION_DIGITS, $maxPrecision);
         } else {
             $formatter->setAttribute(NumberFormatter::FRACTION_DIGITS, $precision);
@@ -147,7 +147,7 @@ class Number
 
         $formatter = new NumberFormatter($locale ?? static::$locale, NumberFormatter::CURRENCY);
 
-        if (! is_null($precision)) {
+        if ($precision !== null) {
             $formatter->setAttribute(NumberFormatter::FRACTION_DIGITS, $precision);
         }
 

@@ -65,14 +65,14 @@ class Enum implements Rule, ValidatorAwareRule
             return $this->isDesirable($value);
         }
 
-        if (is_null($value) || ! enum_exists($this->type) || ! method_exists($this->type, 'tryFrom')) {
+        if ($value === null || ! enum_exists($this->type) || ! method_exists($this->type, 'tryFrom')) {
             return false;
         }
 
         try {
             $value = $this->type::tryFrom($value);
 
-            return ! is_null($value) && $this->isDesirable($value);
+            return $value !== null && $this->isDesirable($value);
         } catch (TypeError) {
             return false;
         }

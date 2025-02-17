@@ -43,7 +43,7 @@ trait GuardHelpers
      */
     public function hasUser()
     {
-        return ! is_null($this->user);
+        return $this->user !== null;
     }
 
     /**
@@ -53,7 +53,7 @@ trait GuardHelpers
      */
     public function check()
     {
-        return ! is_null($this->user());
+        return $this->user() !== null;
     }
 
     /**

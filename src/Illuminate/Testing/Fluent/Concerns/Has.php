@@ -17,7 +17,7 @@ trait Has
      */
     public function count($key, ?int $length = null): self
     {
-        if (is_null($length)) {
+        if ($length === null) {
             $path = $this->dotPath();
 
             PHPUnit::assertCount(
@@ -84,7 +84,7 @@ trait Has
     {
         $prop = $this->prop();
 
-        if (is_int($key) && is_null($length)) {
+        if (is_int($key) && $length === null) {
             return $this->count($key);
         }
 
@@ -95,11 +95,11 @@ trait Has
 
         $this->interactsWith($key);
 
-        if (! is_null($callback)) {
+        if ($callback !== null) {
             return $this->has($key, function (self $scope) use ($length, $callback) {
                 return $scope
                     ->tap(function (self $scope) use ($length) {
-                        if (! is_null($length)) {
+                        if ($length !== null) {
                             $scope->count($length);
                         }
                     })
@@ -112,7 +112,7 @@ trait Has
             return $this->scope($key, $length);
         }
 
-        if (! is_null($length)) {
+        if ($length !== null) {
             return $this->count($key, $length);
         }
 
