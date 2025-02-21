@@ -533,7 +533,7 @@ class Builder implements BuilderContract
      * @param  \Closure|\Illuminate\Contracts\Database\Query\Expression|string  $first
      * @param  string|null  $operator
      * @param  \Illuminate\Contracts\Database\Query\Expression|string|null  $second
-     * @param  string  $type
+     * @param  string|\Illuminate\Database\Enums\BindingType  $type
      * @param  bool  $where
      * @return $this
      */
@@ -573,7 +573,7 @@ class Builder implements BuilderContract
      * @param  \Closure|\Illuminate\Contracts\Database\Query\Expression|string  $first
      * @param  string  $operator
      * @param  \Illuminate\Contracts\Database\Query\Expression|string  $second
-     * @param  string  $type
+     * @param  string|\Illuminate\Database\Enums\BindingType  $type
      * @return $this
      */
     public function joinWhere($table, $first, $operator, $second, $type = 'inner')
@@ -589,7 +589,7 @@ class Builder implements BuilderContract
      * @param  \Closure|\Illuminate\Contracts\Database\Query\Expression|string  $first
      * @param  string|null  $operator
      * @param  \Illuminate\Contracts\Database\Query\Expression|string|null  $second
-     * @param  string  $type
+     * @param  string|\Illuminate\Database\Enums\BindingType  $type
      * @param  bool  $where
      * @return $this
      *
@@ -611,7 +611,7 @@ class Builder implements BuilderContract
      *
      * @param  \Closure|\Illuminate\Database\Query\Builder|\Illuminate\Database\Eloquent\Builder<*>|string  $query
      * @param  string  $as
-     * @param  string  $type
+     * @param  string||\Illuminate\Database\Enums\BindingType  $type
      * @return $this
      */
     public function joinLateral($query, string $as, string $type = 'inner')
@@ -769,7 +769,7 @@ class Builder implements BuilderContract
      * Get a new join clause.
      *
      * @param  \Illuminate\Database\Query\Builder  $parentQuery
-     * @param  string  $type
+     * @param  string|\Illuminate\Database\Enums\BindingType  $type
      * @param  \Illuminate\Contracts\Database\Query\Expression|string  $table
      * @return \Illuminate\Database\Query\JoinClause
      */
@@ -782,7 +782,7 @@ class Builder implements BuilderContract
      * Get a new join lateral clause.
      *
      * @param  \Illuminate\Database\Query\Builder  $parentQuery
-     * @param  string  $type
+     * @param  string|\Illuminate\Database\Enums\BindingType  $type
      * @param  \Illuminate\Contracts\Database\Query\Expression|string  $table
      * @return \Illuminate\Database\Query\JoinLateralClause
      */
@@ -1759,7 +1759,7 @@ class Builder implements BuilderContract
     /**
      * Add a date based (year, month, day, time) statement to the query.
      *
-     * @param  string  $type
+     * @param  string|\Illuminate\Database\Enums\BindingType  $type
      * @param  \Illuminate\Contracts\Database\Query\Expression|string  $column
      * @param  string  $operator
      * @param  mixed  $value
@@ -4190,7 +4190,7 @@ class Builder implements BuilderContract
      * Set the bindings on the query builder.
      *
      * @param  array  $bindings
-     * @param  string  $type
+     * @param  string|\Illuminate\Database\Enums\BindingType  $type
      * @return $this
      *
      * @throws \InvalidArgumentException
@@ -4210,7 +4210,7 @@ class Builder implements BuilderContract
      * Add a binding to the query.
      *
      * @param  mixed  $value
-     * @param  string  $type
+     * @param  string|\Illuminate\Database\Enums\BindingType  $type
      * @return $this
      *
      * @throws \InvalidArgumentException
