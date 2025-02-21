@@ -1681,4 +1681,14 @@ class HttpRequestTest extends TestCase
 
         $this->assertTrue(json_last_error() === JSON_ERROR_NONE);
     }
+
+    public function testItReturnsNewRequestWithNewUri()
+    {
+        $oldRequest = Request::create('https://example.com/index.html?test=1', 'POST');
+        $newRequest = $oldRequest->withUri('https://sample.com/test.php');
+        dd($newRequest, $oldRequest->fullUrl(), $newRequest->fullUrl());
+
+        $this->assertSame($newRequest->url(), '/test.php');
+        $this->assertSame($newRequest->method(), 'POST');
+    }
 }

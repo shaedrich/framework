@@ -784,6 +784,11 @@ class Request extends SymfonyRequest implements Arrayable, ArrayAccess
         $this->getInputSource()->remove($offset);
     }
 
+    public function withUri(Uri|string $uri): self
+    {
+        return $this->duplicate(server: ['REQUEST_URI' => (string)$uri]);
+    }
+
     /**
      * Check if an input element is set on the request.
      *
