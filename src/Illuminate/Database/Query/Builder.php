@@ -31,6 +31,9 @@ use UnitEnum;
 
 use function Illuminate\Support\enum_value;
 
+/**
+ * @method self where(string $column, string $operator, $value, $boolean = 'and')
+ */
 class Builder implements BuilderContract
 {
     /** @use \Illuminate\Database\Concerns\BuildsQueries<object> */
