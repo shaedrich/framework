@@ -9,6 +9,7 @@ use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Traits\Conditionable;
 use Illuminate\Support\Traits\Dumpable;
+use Illuminate\Support\Traits\ManipulatesPath;
 use Illuminate\Support\Traits\Tappable;
 use League\Uri\Contracts\UriInterface;
 use League\Uri\Uri as LeagueUri;
@@ -17,7 +18,7 @@ use Stringable;
 
 class Uri implements Htmlable, Responsable, Stringable
 {
-    use Conditionable, Dumpable, Tappable;
+    use Conditionable, Dumpable, ManipulatesPath, Tappable;
 
     /**
      * The URI instance.
@@ -138,18 +139,6 @@ class Uri implements Htmlable, Responsable, Stringable
     public function port(): ?int
     {
         return $this->uri->getPort();
-    }
-
-    /**
-     * Get the URI's path.
-     *
-     * Empty or missing paths are returned as a single "/".
-     */
-    public function path(): ?string
-    {
-        $path = trim((string) $this->uri->getPath(), '/');
-
-        return $path === '' ? '/' : $path;
     }
 
     /**
