@@ -308,6 +308,26 @@ class Stringable implements JsonSerializable, ArrayAccess, BaseStringable
     }
 
     /**
+     * Explode string by multiple consecutive and/or nested delimiters into collection
+     * @param  [string]|string[]|string[][]  $delimiters
+     */
+    public function explodeBy(...$delimiters): Collection
+    {
+        if (func_num_args() === 1 && is_string($delimiters[0])) {
+            return $this->explode($delimiters[0]);
+        }
+
+        $result = new Collection;
+        $rest = $this->value;
+
+        while (([ $segment, $rest ] = explode($delimiter = array_shift($delimiters), 1)) !== null) {
+            
+        }
+
+        return $result;
+    }
+
+    /**
      * Split a string using a regular expression or by length.
      *
      * @param  string|int  $pattern

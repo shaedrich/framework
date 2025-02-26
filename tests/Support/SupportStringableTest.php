@@ -8,6 +8,7 @@ use Illuminate\Support\HtmlString;
 use Illuminate\Support\Stringable;
 use League\CommonMark\Environment\EnvironmentBuilderInterface;
 use League\CommonMark\Extension\ExtensionInterface;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class SupportStringableTest extends TestCase
@@ -1103,6 +1104,25 @@ class SupportStringableTest extends TestCase
         //  with limit
         $this->assertSame('["Foo","Bar Baz"]', (string) $this->stringable('Foo Bar Baz')->explode(' ', 2));
         $this->assertSame('["Foo","Bar"]', (string) $this->stringable('Foo Bar Baz')->explode(' ', -1));
+    }
+
+    #[DataProvider('providesExplodeByStrings')]
+    public function testExplodeBy(string $input, array $delimiters, array $output)
+    {
+        $result = $this->stringable($input)->explodeBy(...$delimiters);
+        $this->assertInstanceOf(Collection::class, $result);
+
+        $this->assertSame($output, $result->all());
+    }
+
+    public static function providesExplodeByStrings(): array
+    {
+        return [
+            'simple explode' => ['Foo, Bar, Baz', [', '], ['Foo', 'Bar', 'Baz']],
+            'nested explode' => ['Foo, Bar, Baz', [[', '], ['; ']], ['Foo', 'Bar', 'Baz']],
+            'consecutive explode' => ['Foo, Bar; Baz', [', ', ';'], ['Foo', 'Bar', 'Baz']],
+            'both combined' => ['Foo, Bar, Baz', [[', '], ['; '], ': '], ['Foo', 'Bar', 'Baz']],
+        ];
     }
 
     public function testChunk()
