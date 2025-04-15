@@ -43,9 +43,9 @@ if (! function_exists('when')) {
         $value = $value instanceof Closure ? $value() : $value;
 
         if (! $value) {
-            return $callback($this, $value) ?? $value;
+            return $callback($value) ?? $value;
         } elseif ($default) {
-            return $default($this, $value) ?? $value;
+            return $default($value) ?? $value;
         }
 
         return $value;
