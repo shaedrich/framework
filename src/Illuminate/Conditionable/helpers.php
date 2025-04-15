@@ -10,30 +10,30 @@ if (! function_exists('when')) {
      * @template TWhenParameter
      * @template TWhenReturnType
      *
-     * @param  (\Closure($this): TWhenParameter)|TWhenParameter|null  $value
-     * @param  (callable($this, TWhenParameter): TWhenReturnType)|null  $callback
-     * @param  (callable($this, TWhenParameter): TWhenReturnType)|null  $default
-     * @return $this|TWhenReturnType
+     * @param  (\Closure(): TWhenParameter)|TWhenParameter|null  $value
+     * @param  (callable(TWhenParameter): TWhenReturnType)|null  $callback
+     * @param  (callable(TWhenParameter): TWhenReturnType)|null  $default
+     * @return TWhenParameter|null|TWhenReturnType
      */
     function when($value = null, ?callable $callback = null, ?callable $default = null)
     {
-        $value = $value instanceof Closure ? $value($this) : $value;
+        $value = $value instanceof Closure ? $value() : $value;
 
         if (func_num_args() === 0) {
-            return new HigherOrderWhenProxy($this);
+            return new HigherOrderWhenProxy();
         }
 
         if (func_num_args() === 1) {
-            return (new HigherOrderWhenProxy($this))->condition($value);
+            return (new HigherOrderWhenProxy())->condition($value);
         }
 
         if ($value) {
-            return $callback($this, $value) ?? $this;
+            return $callback($value) ?? $value;
         } elseif ($default) {
-            return $default($this, $value) ?? $this;
+            return $default($value) ?? $value;
         }
 
-        return $this;
+        return $value;
     }
 
     /**
@@ -42,29 +42,29 @@ if (! function_exists('when')) {
      * @template TUnlessParameter
      * @template TUnlessReturnType
      *
-     * @param  (\Closure($this): TUnlessParameter)|TUnlessParameter|null  $value
-     * @param  (callable($this, TUnlessParameter): TUnlessReturnType)|null  $callback
-     * @param  (callable($this, TUnlessParameter): TUnlessReturnType)|null  $default
-     * @return $this|TUnlessReturnType
+     * @param  (\Closure(): TUnlessParameter)|TUnlessParameter|null  $value
+     * @param  (callable(TUnlessParameter): TUnlessReturnType)|null  $callback
+     * @param  (callable(TUnlessParameter): TUnlessReturnType)|null  $default
+     * @return TWhenParameter|null|TUnlessReturnType
      */
     function unless($value = null, ?callable $callback = null, ?callable $default = null)
     {
-        $value = $value instanceof Closure ? $value($this) : $value;
+        $value = $value instanceof Closure ? $value() : $value;
 
         if (func_num_args() === 0) {
-            return (new HigherOrderWhenProxy($this))->negateConditionOnCapture();
+            return (new HigherOrderWhenProxy())->negateConditionOnCapture();
         }
 
         if (func_num_args() === 1) {
-            return (new HigherOrderWhenProxy($this))->condition(! $value);
+            return (new HigherOrderWhenProxy())->condition(! $value);
         }
 
         if (! $value) {
-            return $callback($this, $value) ?? $this;
+            return $callback($this, $value) ?? $value;
         } elseif ($default) {
-            return $default($this, $value) ?? $this;
+            return $default($this, $value) ?? $value;
         }
 
-        return $this;
+        return $value;
     }
 }
