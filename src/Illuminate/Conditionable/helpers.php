@@ -18,13 +18,11 @@ if (! function_exists('when')) {
     {
         $value = $value instanceof Closure ? $value() : $value;
 
-        if ($value) {
-            return $callback($value) ?? $value;
-        } elseif ($default) {
-            return $default($value) ?? $value;
-        }
-
-        return $value;
+        return match (true) {
+            !! $value => $callback($value) ?? $value,
+            $default => $default($value) ?? $value,
+            default => $value,
+        };
     }
 
     /**
@@ -42,12 +40,10 @@ if (! function_exists('when')) {
     {
         $value = $value instanceof Closure ? $value() : $value;
 
-        if (! $value) {
-            return $callback($value) ?? $value;
-        } elseif ($default) {
-            return $default($value) ?? $value;
-        }
-
-        return $value;
+        return match (true) {
+            ! $value => $callback($value) ?? $value,
+            $default => $default($value) ?? $value,
+            default => $value,
+        };
     }
 }
