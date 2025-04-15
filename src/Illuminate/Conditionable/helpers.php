@@ -20,7 +20,7 @@ if (! function_exists('when')) {
 
         return match (true) {
             !! $value => $callback($value) ?? $value,
-            $default => $default($value) ?? $value,
+            is_callable($default) => $default($value) ?? $value,
             default => $value,
         };
     }
@@ -42,7 +42,7 @@ if (! function_exists('when')) {
 
         return match (true) {
             ! $value => $callback($value) ?? $value,
-            $default => $default($value) ?? $value,
+            is_callable($default) => $default($value) ?? $value,
             default => $value,
         };
     }
