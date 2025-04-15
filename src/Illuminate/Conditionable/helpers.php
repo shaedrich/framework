@@ -1,7 +1,6 @@
 <?php
 
 use Closure;
-use Illuminate\Support\HigherOrderWhenProxy;
 
 if (! function_exists('when')) {
     /**
@@ -10,22 +9,14 @@ if (! function_exists('when')) {
      * @template TWhenParameter
      * @template TWhenReturnType
      *
-     * @param  (\Closure(): TWhenParameter)|TWhenParameter|null  $value
-     * @param  (callable(TWhenParameter): TWhenReturnType)|null  $callback
+     * @param  (\Closure(): TWhenParameter)|TWhenParameter  $value
+     * @param  (callable(TWhenParameter): TWhenReturnType)  $callback
      * @param  (callable(TWhenParameter): TWhenReturnType)|null  $default
-     * @return TWhenParameter|null|TWhenReturnType
+     * @return TWhenParameter|TWhenReturnType
      */
-    function when($value = null, ?callable $callback = null, ?callable $default = null)
+    function when($value, callable $callback, ?callable $default = null)
     {
         $value = $value instanceof Closure ? $value() : $value;
-
-        if (func_num_args() === 0) {
-            return new HigherOrderWhenProxy();
-        }
-
-        if (func_num_args() === 1) {
-            return (new HigherOrderWhenProxy())->condition($value);
-        }
 
         if ($value) {
             return $callback($value) ?? $value;
@@ -42,22 +33,14 @@ if (! function_exists('when')) {
      * @template TUnlessParameter
      * @template TUnlessReturnType
      *
-     * @param  (\Closure(): TUnlessParameter)|TUnlessParameter|null  $value
-     * @param  (callable(TUnlessParameter): TUnlessReturnType)|null  $callback
+     * @param  (\Closure(): TUnlessParameter)|TUnlessParameter  $value
+     * @param  (callable(TUnlessParameter): TUnlessReturnType)  $callback
      * @param  (callable(TUnlessParameter): TUnlessReturnType)|null  $default
-     * @return TWhenParameter|null|TUnlessReturnType
+     * @return TWhenParameter|TUnlessReturnType
      */
-    function unless($value = null, ?callable $callback = null, ?callable $default = null)
+    function unless($value, callable $callback, ?callable $default = null)
     {
         $value = $value instanceof Closure ? $value() : $value;
-
-        if (func_num_args() === 0) {
-            return (new HigherOrderWhenProxy())->negateConditionOnCapture();
-        }
-
-        if (func_num_args() === 1) {
-            return (new HigherOrderWhenProxy())->condition(! $value);
-        }
 
         if (! $value) {
             return $callback($this, $value) ?? $value;
