@@ -229,6 +229,15 @@ class FoundationFormRequestTest extends TestCase
         $request->validateResolved();
     }
 
+    public function testValidateFormRequestWithAttributes()
+    {
+        $this->createRequest([], FoundationTestFormRequestAttributes::class);
+        $this->assertEquals([
+            'either' => ['number', 'required_without:or', 'prohibits:or'],
+            'or' => ['string', 'required_without:either', 'prohibits:either'],
+        ], $request->rules());
+    }
+
     /**
      * Catch the given exception thrown from the executor, and return it.
      *
@@ -514,5 +523,17 @@ class FoundationTestFormRequestWithGetRules extends FormRequest
                 'a' => ['required', 'int', 'min:2'],
             ];
         }
+    }
+}
+
+class FoundationTestFormRequestAttributes extends FormRequest
+{
+    #[EitherOr('either', 'or')]
+    public function rules()
+    {
+        return [
+            'either' => 'number',
+            'or' => 'string',
+        ];
     }
 }
