@@ -367,10 +367,10 @@ abstract class Model implements Arrayable, ArrayAccess, CanBeEscapedWhenCastToSt
         $conventionalBootMethods = array_map(static fn ($trait) => 'boot'.class_basename($trait), $uses);
         $conventionalInitMethods = array_map(static fn ($trait) => 'initialize'.class_basename($trait), $uses);
         $isBootedMethod = in_array($method->getName(), $booted);
-		$isConventionalBootMethod = in_array($method->getName(), $conventionalBootMethods);
-		$hasBootAttributes = $method->getAttributes(Boot::class) !== [];
-		$isConventionalInitMethod = in_array($method->getName(), $conventionalInitMethods);
-		$hasInitAttributes = $method->getAttributes(Initialize::class) !== [];
+        $isConventionalBootMethod = in_array($method->getName(), $conventionalBootMethods);
+        $hasBootAttributes = $method->getAttributes(Boot::class) !== [];
+        $isConventionalInitMethod = in_array($method->getName(), $conventionalInitMethods);
+        $hasInitAttributes = $method->getAttributes(Initialize::class) !== [];
 
         foreach ((new ReflectionClass($class))->getMethods() as $method) {
             if (! $isBootedMethod &&
