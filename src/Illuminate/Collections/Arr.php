@@ -599,13 +599,7 @@ class Arr
      */
     public static function isFlat($array): bool
     {
-        foreach ($array as $entry) {
-            if (is_array($entry)) {
-                return false;
-            }
-        }
-
-        return true;
+        return self::every($array, fn ($value, $key) => ! is_array($value));
     }
 
     /**
