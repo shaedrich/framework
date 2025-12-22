@@ -67,6 +67,13 @@ abstract class Factory
     protected $for;
 
     /**
+     * The deep relationships that will be applied to the model.
+     *
+     * @var \Illuminate\Support\Collection
+     */
+    protected $deep;
+
+    /**
      * The model instances to always use when creating relationships.
      *
      * @var \Illuminate\Support\Collection
@@ -163,6 +170,7 @@ abstract class Factory
      * @param  \Illuminate\Support\Collection|null  $recycle
      * @param  bool|null  $expandRelationships
      * @param  array  $excludeRelationships
+     * @param  \Illuminate\Support\Collection|null  $deep
      */
     public function __construct(
         $count = null,
@@ -175,11 +183,13 @@ abstract class Factory
         ?Collection $recycle = null,
         ?bool $expandRelationships = null,
         array $excludeRelationships = [],
+        ?Collection $deep = null,
     ) {
         $this->count = $count;
         $this->states = $states ?? new Collection;
         $this->has = $has ?? new Collection;
         $this->for = $for ?? new Collection;
+        $this->deep = $deep ?? new Collection;
         $this->afterMaking = $afterMaking ?? new Collection;
         $this->afterCreating = $afterCreating ?? new Collection;
         $this->connection = $connection;
@@ -387,6 +397,12 @@ abstract class Factory
      */
     protected function createChildren(Model $model)
     {
+        [$deep, $immediate] = $deep->partition(fn ($_, $key) => str_contains($key, '.'))
+          ->pipe(fn (Collection $collection) => [
+              Arr::undot($collection->first()),
+              // TODO: Determine whether relation is `for` or `has`
+              collect(['for', 'has'])->combine(Arr::partition($collection->last(), fn ($_, $key) => ord($key) % 2 === 0)),
+          ]);
         Model::unguarded(function () use ($model) {
             $this->has->each(function ($has) use ($model) {
                 $has->recycle($this->recycle)->createFor($model);
