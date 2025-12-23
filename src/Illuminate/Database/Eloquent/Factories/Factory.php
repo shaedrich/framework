@@ -7,6 +7,7 @@ use Faker\Generator;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
+use Illuminate\Database\Eloquent\Relation\BelongsTo;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -400,11 +401,10 @@ abstract class Factory
         [$deep, $immediate] = $deep->partition(fn ($_, $key) => str_contains($key, '.'))
           ->pipe(fn (Collection $collection) => [
               Arr::undot($collection->first()),
-              // TODO: Determine whether relation is `for` or `has`
-              collect(['for', 'has'])->combine(Arr::partition($collection->last(), fn ($_, $key) => ord($key) % 2 === 0)),
+              collect(['has', 'for'])->combine(Arr::partition($collection->last(), fn ($_, $key) => $model->{$key}() instanceof BelongsTo)),
           ]);
         Model::unguarded(function () use ($model) {
-            $this->has->each(function ($has) use ($model) {
+            $immediate->get('has')->merge($this->has)->each(function ($has) use ($model) {
                 $has->recycle($this->recycle)->createFor($model);
             });
         });
