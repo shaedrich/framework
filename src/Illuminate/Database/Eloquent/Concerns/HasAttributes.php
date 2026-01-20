@@ -79,21 +79,21 @@ trait HasAttributes
     /**
      * The attributes that should be cast.
      *
-     * @var array
+     * @var array<string, string|\Stringable|string[]|class-string<\Illuminate\Contracts\Database\Eloquent\Castable|\UnitEnum|\Illuminate\Contracts\Database\Eloquent\CastsInboundAttributes>>
      */
     protected $casts = [];
 
     /**
      * The attributes that have been cast using custom classes.
      *
-     * @var array
+     * @var array<string, mixed>
      */
     protected $classCastCache = [];
 
     /**
      * The attributes that have been cast using "Attribute" return type mutators.
      *
-     * @var array
+     * @var array<string, mixed>
      */
     protected $attributeCastCache = [];
 
@@ -142,7 +142,7 @@ trait HasAttributes
     /**
      * The accessors to append to the model's array form.
      *
-     * @var array
+     * @var string[]
      */
     protected $appends = [];
 
@@ -156,35 +156,35 @@ trait HasAttributes
     /**
      * The cache of the mutated attributes for each class.
      *
-     * @var array
+     * @var array<class-string<static>, string[]>
      */
     protected static $mutatorCache = [];
 
     /**
      * The cache of the "Attribute" return type marked mutated attributes for each class.
      *
-     * @var array
+     * @var array<class-string<static>, array<string, bool>>
      */
     protected static $attributeMutatorCache = [];
 
     /**
      * The cache of the "Attribute" return type marked mutated, gettable attributes for each class.
      *
-     * @var array
+     * @var array<class-string<static>, array<string, bool>>
      */
     protected static $getAttributeMutatorCache = [];
 
     /**
      * The cache of the "Attribute" return type marked mutated, settable attributes for each class.
      *
-     * @var array
+     * @var array<class-string<static>, array<string, bool>>
      */
     protected static $setAttributeMutatorCache = [];
 
     /**
      * The cache of the converted cast types.
      *
-     * @var array
+     * @var array<string, string>
      */
     protected static $castTypeCache = [];
 
@@ -784,8 +784,9 @@ trait HasAttributes
     /**
      * Ensure that the given casts are strings.
      *
-     * @param  array  $casts
-     * @return array
+     * @param  array<string, string|\Stringable|string[]|class-string<\Illuminate\Contracts\Database\Eloquent\Castable|\UnitEnum|\Illuminate\Contracts\Database\Eloquent\CastsInboundAttributes>>  $casts
+     * @return array<string, string|\Stringable|string[]|class-string<\Illuminate\Contracts\Database\Eloquent\Castable|\UnitEnum|\Illuminate\Contracts\Database\Eloquent\CastsInboundAttributes>>
+     * @throws \InvalidArgumentException when non-Stringable object is given 
      */
     protected function ensureCastsAreStringValues($casts)
     {
