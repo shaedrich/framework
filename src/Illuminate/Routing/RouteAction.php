@@ -14,8 +14,8 @@ class RouteAction
      * Parse the given action into an array.
      *
      * @param  string  $uri
-     * @param  mixed  $action
-     * @return array
+     * @param  array{class-string, string}|callable-string|array{uses?: callable, controller?: string}|null  $action
+     * @return ($action is null ? array{use: \Closure(): never} : (array{uses: callable}|array{uses: string, controller: string}))
      */
     public static function parse($uri, $action)
     {
@@ -54,7 +54,7 @@ class RouteAction
      * Get an action for a route that has no action.
      *
      * @param  string  $uri
-     * @return array
+     * @return array{use: \Closure(): never}
      *
      * @throws \LogicException
      */
@@ -81,7 +81,7 @@ class RouteAction
     /**
      * Make an action for an invokable controller.
      *
-     * @param  string  $action
+     * @param  class-string  $action
      * @return string
      *
      * @throws \UnexpectedValueException
@@ -98,8 +98,9 @@ class RouteAction
     /**
      * Determine if the given array actions contain a serialized Closure.
      *
-     * @param  array  $action
+     * @param  array{uses: callable}  $action
      * @return bool
+     * @phpstan-assert-if-true array{uses: string} $action
      */
     public static function containsSerializedClosure(array $action)
     {
