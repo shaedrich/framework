@@ -11,9 +11,11 @@ class RouteBinding
     /**
      * Create a Route model binding for a given callback.
      *
+     * @template TBinderClosure of \Closure
+     *
      * @param  \Illuminate\Container\Container  $container
-     * @param  \Closure|string  $binder
-     * @return \Closure
+     * @param  TBinderClosure|string  $binder
+     * @return ($binder is string ? \Closure : TBinderClosure)
      */
     public static function forCallback($container, $binder)
     {
@@ -49,7 +51,7 @@ class RouteBinding
      * Create a Route model binding for a model.
      *
      * @param  \Illuminate\Container\Container  $container
-     * @param  string  $class
+     * @param  class-string<\Illuminate\Database\Eloquent\Model>  $class
      * @param  \Closure|null  $callback
      * @return \Closure
      *
