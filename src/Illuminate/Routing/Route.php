@@ -27,6 +27,10 @@ use Symfony\Component\Routing\Route as SymfonyRoute;
 
 use function Illuminate\Support\enum_value;
 
+/**
+ * @template TParamKey of string
+ * @template TParameters of array<TParamKey, mixed>
+ */
 class Route
 {
     use Conditionable, CreatesRegularExpressionRouteConstraints, FiltersControllerMiddleware, Macroable, ResolvesRouteDependencies;
@@ -41,14 +45,14 @@ class Route
     /**
      * The HTTP methods the route responds to.
      *
-     * @var array
+     * @var string[]
      */
     public $methods;
 
     /**
      * The route action array.
      *
-     * @var array
+     * @var array{use: \Closure(): never}|array{uses: callable}|array{uses: string, controller: string, prefix?: string, domain?: string, can?: array{\UnitEnum|string, string|string[]}}
      */
     public $action;
 
@@ -62,14 +66,14 @@ class Route
     /**
      * The controller instance.
      *
-     * @var mixed
+     * @var object|null
      */
     public $controller;
 
     /**
      * The default values for the route.
      *
-     * @var array
+     * @var array<string, mixed>
      */
     public $defaults = [];
 
@@ -83,14 +87,14 @@ class Route
     /**
      * The array of matched parameters.
      *
-     * @var array|null
+     * @var TParameters|null
      */
     public $parameters;
 
     /**
      * The parameter names for the route.
      *
-     * @var array|null
+     * @var TParamKey[]|null
      */
     public $parameterNames;
 
@@ -160,16 +164,16 @@ class Route
     /**
      * The validators used by the routes.
      *
-     * @var array
+     * @var \Illuminate\Routing\Matching\ValidatorInterface[]
      */
     public static $validators;
 
     /**
      * Create a new Route instance.
      *
-     * @param  array|string  $methods
+     * @param  string[]|string  $methods
      * @param  string  $uri
-     * @param  \Closure|array  $action
+     * @param  \Closure|array{use: \Closure(): never}|array{uses: callable, prefix?: string}|array{uses: string, controller: string, prefix?: string}  $action
      */
     public function __construct($methods, $uri, $action)
     {
@@ -187,8 +191,8 @@ class Route
     /**
      * Parse the route action into a standard array.
      *
-     * @param  callable|array|null  $action
-     * @return array
+     * @param  array{class-string, string}|callable-string|array{uses?: callable, controller?: string, prefix?: string}|null  $action
+     * @return array{use: \Closure(): never}|array{uses: callable}|array{uses: string, controller: string, prefix?: string}
      *
      * @throws \UnexpectedValueException
      */
@@ -221,6 +225,7 @@ class Route
      * Checks whether the route's action is a controller.
      *
      * @return bool
+     * @phpstan-assert-if-true array{uses: string} $action
      */
     protected function isControllerAction()
     {
@@ -270,7 +275,7 @@ class Route
     /**
      * Get the controller instance for the route.
      *
-     * @return mixed
+     * @return object|null
      *
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
@@ -292,7 +297,7 @@ class Route
     /**
      * Get the controller class used for the route.
      *
-     * @return string|null
+     * @return class-string|null
      */
     public function getControllerClass()
     {
@@ -312,7 +317,7 @@ class Route
     /**
      * Parse the controller.
      *
-     * @return array
+     * @return array{class-string, string}
      */
     protected function parseControllerCallback()
     {
@@ -497,7 +502,7 @@ class Route
     /**
      * Get the key / value list of parameters without null values.
      *
-     * @return array
+     * @return (string|object)[]
      */
     public function parametersWithoutNulls()
     {
@@ -507,7 +512,7 @@ class Route
     /**
      * Get all of the parameter names for the route.
      *
-     * @return array
+     * @return string[]
      */
     public function parameterNames()
     {
@@ -521,7 +526,7 @@ class Route
     /**
      * Get the parameter names for the route.
      *
-     * @return array
+     * @return string[]
      */
     protected function compileParameterNames()
     {
@@ -533,8 +538,10 @@ class Route
     /**
      * Get the parameters that are listed in the route / controller signature.
      *
-     * @param  array  $conditions
-     * @return array
+     * @template TSubClass
+     *
+     * @param  TSubClass|array  $conditions
+     * @return ($conditions is string ? array{subClass: TSubClass} : array)
      */
     public function signatureParameters($conditions = [])
     {
@@ -638,7 +645,7 @@ class Route
     /**
      * Set the default values for the route.
      *
-     * @param  array  $defaults
+     * @param  array<string, mixed>  $defaults
      * @return $this
      */
     public function setDefaults(array $defaults)
@@ -667,9 +674,12 @@ class Route
     /**
      * Parse arguments to the where method into an array.
      *
-     * @param  array|string  $name
-     * @param  string  $expression
-     * @return array
+     * @template TName of string
+     * @template TExpression of string
+     *
+     * @param  array<TName, TExpression>|TName  $name
+     * @param  TExpression  $expression
+     * @return array<TName, TExpression>
      */
     protected function parseWhere($name, $expression)
     {
@@ -679,7 +689,7 @@ class Route
     /**
      * Set a list of regular expression requirements on the route.
      *
-     * @param  array  $wheres
+     * @param  array<string, string>|array<string, string>[]  $wheres
      * @return $this
      */
     public function setWheres(array $wheres)
@@ -719,7 +729,7 @@ class Route
     /**
      * Get the HTTP verbs the route responds to.
      *
-     * @return array
+     * @return string[]
      */
     public function methods()
     {
@@ -928,7 +938,7 @@ class Route
     /**
      * Set the handler for the route.
      *
-     * @param  \Closure|array|string  $action
+     * @param  \Closure|array{0: string, 1: string}|string  $action
      * @return $this
      */
     public function uses($action)
@@ -986,7 +996,16 @@ class Route
      * Get the action array or one of its properties for the route.
      *
      * @param  string|null  $key
-     * @return mixed
+     * @return ($key is null
+     *    ? array{use: \Closure(): never}|array{uses: callable}|array{uses: string, controller: string, prefix?: string, domain?: string, can?: array{\UnitEnum|string, string|string[]}}
+     *    : ($key is 'use'
+     *        ? (\Closure(): never)|string|callable
+     *        ($key is 'controller'|'prefix'|'domain'
+     *            ? string|null
+     *            : ($key is 'can' ? array{\UnitEnum|string, string|string[]}|null : mixed)
+     *        )
+     *    )
+     * )
      */
     public function getAction($key = null)
     {
@@ -996,7 +1015,7 @@ class Route
     /**
      * Set the action array for the route.
      *
-     * @param  array  $action
+     * @param  array{use: \Closure(): never}|array{uses: callable}|array{uses: string, controller: string, prefix?: string, domain?: string, can?: array{\UnitEnum|string, string|string[]}}  $action
      * @return $this
      */
     public function setAction(array $action)
@@ -1094,7 +1113,7 @@ class Route
      * Specify that the "Authorize" / "can" middleware should be applied to the route with the given options.
      *
      * @param  \UnitEnum|string  $ability
-     * @param  array|string  $models
+     * @param  string|string[]  $models
      * @return $this
      */
     public function can($ability, $models = [])
@@ -1140,7 +1159,7 @@ class Route
     /**
      * Get the statically provided controller middleware for the given class and method.
      *
-     * @param  string  $class
+     * @param  class-string  $class
      * @param  string  $method
      * @return array
      */
@@ -1297,7 +1316,7 @@ class Route
     /**
      * Get the route validators for the instance.
      *
-     * @return array
+     * @return \Illuminate\Routing\Matching\ValidatorInterface[]
      */
     public static function getValidators()
     {
@@ -1405,8 +1424,8 @@ class Route
     /**
      * Dynamically access route parameters.
      *
-     * @param  string  $key
-     * @return mixed
+     * @param  TParamKey  $key
+     * @return TParameters[TParamKey]
      */
     public function __get($key)
     {
