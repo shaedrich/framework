@@ -11,6 +11,9 @@ use Illuminate\Support\Traits\Macroable;
 use InvalidArgumentException;
 
 /**
+ * @template TPassthru of string
+ * @template TAllowedAttr of string
+ *
  * @method \Illuminate\Routing\Route any(string $uri, \Closure|array|string|null $action = null)
  * @method \Illuminate\Routing\Route delete(string $uri, \Closure|array|string|null $action = null)
  * @method \Illuminate\Routing\Route get(string $uri, \Closure|array|string|null $action = null)
@@ -56,7 +59,7 @@ class RouteRegistrar
     /**
      * The methods to dynamically pass through to the router.
      *
-     * @var string[]
+     * @var TPassthru[]
      */
     protected $passthru = [
         'get', 'post', 'put', 'patch', 'delete', 'options', 'any',
@@ -65,7 +68,7 @@ class RouteRegistrar
     /**
      * The attributes that can be set through this class.
      *
-     * @var string[]
+     * @var TAllowedAttr[]
      */
     protected $allowedAttributes = [
         'as',
@@ -280,7 +283,7 @@ class RouteRegistrar
      *
      * @param  string  $method
      * @param  array  $parameters
-     * @return \Illuminate\Routing\Route|$this
+     * @return ($method is 'middleware'|'can' ? $this : ($method is TAllowedAttr ? $this : ($method is TPassthru ? \Illuminate\Routing\Route : \Illuminate\Routing\Route|$this)))
      *
      * @throws \BadMethodCallException
      */
