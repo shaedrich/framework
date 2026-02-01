@@ -394,7 +394,7 @@ class Route
     /**
      * Determine if the route has parameters.
      *
-     * @return bool
+     * @return (TParameters is array{} ? false : true)
      */
     public function hasParameters()
     {
@@ -404,8 +404,10 @@ class Route
     /**
      * Determine a given parameter exists from the route.
      *
-     * @param  string  $name
-     * @return bool
+     * @template TKey of string
+     *
+     * @param  TKey  $name
+     * @return (TKey is key-of<TParameters> ? true : false)
      */
     public function hasParameter($name)
     {
@@ -419,9 +421,12 @@ class Route
     /**
      * Get a given parameter from the route.
      *
-     * @param  string  $name
-     * @param  string|object|null  $default
-     * @return string|object|null
+     * @template TKey of string
+     * @template TDefault of string|object|null
+     *
+     * @param  TKey  $name
+     * @param  TDefault  $default
+     * @return (TKey is key-of<TParameters> ? TParameters[TKey] : TDefault)
      */
     public function parameter($name, $default = null)
     {
@@ -443,7 +448,7 @@ class Route
     /**
      * Set a parameter to the given value.
      *
-     * @param  string  $name
+     * @param  TParamKey  $name
      * @param  string|object|null  $value
      * @return void
      */
@@ -457,7 +462,7 @@ class Route
     /**
      * Unset a parameter on the route if it is set.
      *
-     * @param  string  $name
+     * @param  TParamKey  $name
      * @return void
      */
     public function forgetParameter($name)
@@ -470,7 +475,7 @@ class Route
     /**
      * Get the key / value list of parameters for the route.
      *
-     * @return array
+     * @return TParameters
      *
      * @throws \LogicException
      */
@@ -770,7 +775,7 @@ class Route
      * Get or set the domain for the route.
      *
      * @param  \BackedEnum|string|null  $domain
-     * @return $this|string|null
+     * @return ($domain is null ? string|null : $this)
      *
      * @throws \InvalidArgumentException
      */
