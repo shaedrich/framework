@@ -84,7 +84,7 @@ class RouteAction
      * @template TClass
      *
      * @param  class-string<TClass>  $action
-     * @return ($action is (object&callable) ? string : never)
+     * @return (TClass is (object&callable) ? string : never)
      *
      * @throws \UnexpectedValueException
      */
