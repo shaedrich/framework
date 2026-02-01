@@ -81,8 +81,10 @@ class RouteAction
     /**
      * Make an action for an invokable controller.
      *
-     * @param  class-string  $action
-     * @return string
+     * @template TClass
+     *
+     * @param  class-string<TClass>  $action
+     * @return ($action is (object&callable) ? string : never)
      *
      * @throws \UnexpectedValueException
      */
