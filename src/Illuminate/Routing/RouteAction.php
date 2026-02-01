@@ -14,7 +14,7 @@ class RouteAction
      * Parse the given action into an array.
      *
      * @param  string  $uri
-     * @param  array{class-string, string}|callable-string|array{uses?: callable, controller?: string}|null  $action
+     * @param  array{class-string, string}|callable-string|array{uses?: callable, controller?: string, prefix?: string, domain?: string, can?: array{\UnitEnum|string, string|string[]}}|null  $action
      * @return ($action is null ? array{use: \Closure(): never} : (array{uses: callable}|array{uses: string, controller: string}))
      */
     public static function parse($uri, $action)
