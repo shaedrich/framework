@@ -1203,7 +1203,7 @@ class Router implements BindingRegistrar, RegistrarContract
     /**
      * Get the global "where" patterns.
      *
-     * @return array
+     * @return array<string, string>
      */
     public function getPatterns()
     {
@@ -1225,7 +1225,7 @@ class Router implements BindingRegistrar, RegistrarContract
     /**
      * Set a group of global where patterns on all routes.
      *
-     * @param  array  $patterns
+     * @param  array<string, string>  $patterns
      * @return void
      */
     public function patterns($patterns)
@@ -1413,8 +1413,8 @@ class Router implements BindingRegistrar, RegistrarContract
     /**
      * Get or set the verbs used in the resource URIs.
      *
-     * @param  array  $verbs
-     * @return array|null
+     * @param  array<string, string>  $verbs
+     * @return ($verbs is array{} ? array<string, string> : null)
      */
     public function resourceVerbs(array $verbs = [])
     {
@@ -1451,7 +1451,13 @@ class Router implements BindingRegistrar, RegistrarContract
     /**
      * Set the compiled route collection instance.
      *
-     * @param  array  $routes
+     * @param  array{
+     *    bool,
+     *    array<string, array{array<string, mixed>, string|null, array<string, mixed>|null, array<string, mixed>|null, bool, int|float}>,
+     *    array<int, string>,
+     *    array<int, array{array<string, mixed>, array<int, string>, array<string, mixed>|null, array<string, mixed>|null, bool, bool, int|float}>,
+     *    ?\Closure(int, \Symfony\Component\Routing\RequestContext, \Symfony\Component\HttpFoundation\Request|null, array<string, mixed>): bool
+     * }  $routes
      * @return void
      */
     public function setCompiledRoutes(array $routes)
@@ -1504,7 +1510,7 @@ class Router implements BindingRegistrar, RegistrarContract
      *
      * @param  string  $method
      * @param  array  $parameters
-     * @return mixed
+     * @return ($method is 'middleware'|'can' ? \\Illuminate\Routing\RouteRegistrar : mixed)
      */
     public function __call($method, $parameters)
     {
