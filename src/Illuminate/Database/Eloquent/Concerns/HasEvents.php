@@ -83,7 +83,7 @@ trait HasEvents
     /**
      * Register a single observer with the model.
      *
-     * @param  object|string  $class
+     * @param  object|class-string  $class
      * @return void
      *
      * @throws \RuntimeException
@@ -105,8 +105,11 @@ trait HasEvents
     /**
      * Resolve the observer's class name from an object or string.
      *
-     * @param  object|string  $class
-     * @return class-string
+     * @template TClass of object
+     *
+     * @param  TClass|class-string<TClass>  $class
+     * @return class-string<TClass>
+     * @phpstan-return ($class is object ? class-string<TClass> : ($class is class-string ? class-string<TClass> : never))
      *
      * @throws \InvalidArgumentException
      */
@@ -249,8 +252,12 @@ trait HasEvents
     /**
      * Filter the model event results.
      *
-     * @param  mixed  $result
+	 * @template TResult
+	 * @template TResultItem
+	 *
+     * @param  TResult  $result
      * @return mixed
+	 * @phpstan-return ($result is array<array-key, TResultItem|null> ? array<array-key, TResultItem> : TResult)
      */
     protected function filterModelEventResults($result)
     {
@@ -439,8 +446,10 @@ trait HasEvents
     /**
      * Execute a callback without firing any model events for any model type.
      *
-     * @param  callable  $callback
-     * @return mixed
+     * @template TResult
+     *
+     * @param  (callable(): TResult)  $callback
+     * @return TResult
      */
     public static function withoutEvents(callable $callback)
     {
