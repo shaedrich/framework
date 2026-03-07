@@ -70,7 +70,7 @@ trait HasGlobalScopes
     /**
      * Register multiple global scopes on the model.
      *
-     * @param  array  $scopes
+     * @param  array<array-key, \Illuminate\Database\Eloquent\Scope|(\Closure(\Illuminate\Database\Eloquent\Builder<static>): mixed)>  $scopes
      * @return void
      */
     public static function addGlobalScopes(array $scopes)
@@ -115,7 +115,7 @@ trait HasGlobalScopes
     /**
      * Get all of the global scopes that are currently registered.
      *
-     * @return array
+     * @return array<class-string, array<string, \Illuminate\Database\Eloquent\Scope|(\Closure(\Illuminate\Database\Eloquent\Builder<static>): mixed)>>
      */
     public static function getAllGlobalScopes()
     {
@@ -125,7 +125,7 @@ trait HasGlobalScopes
     /**
      * Set the current global scopes.
      *
-     * @param  array  $scopes
+     * @param  array<class-string, array<string, \Illuminate\Database\Eloquent\Scope|(\Closure(\Illuminate\Database\Eloquent\Builder<static>): mixed)>>  $scopes
      * @return void
      */
     public static function setAllGlobalScopes($scopes)
@@ -136,7 +136,7 @@ trait HasGlobalScopes
     /**
      * Get the global scopes for this class instance.
      *
-     * @return array
+     * @return array<string, \Illuminate\Database\Eloquent\Scope|(\Closure(\Illuminate\Database\Eloquent\Builder<static>): mixed)>
      */
     public function getGlobalScopes()
     {
