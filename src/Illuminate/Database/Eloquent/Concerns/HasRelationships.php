@@ -28,7 +28,7 @@ trait HasRelationships
     /**
      * The loaded relationships for the model.
      *
-     * @var array
+     * @var array<string, mixed>
      */
     protected $relations = [];
 
@@ -65,7 +65,7 @@ trait HasRelationships
     /**
      * The relation resolver callbacks.
      *
-     * @var array
+     * @var array<class-string<TRelatedModel>, array<string, \Closure>>
      */
     protected static $relationResolvers = [];
 
@@ -988,10 +988,17 @@ trait HasRelationships
     /**
      * Get the polymorphic relationship columns.
      *
+     * @template TType of string
+     * @template TId of string
+     *
      * @param  string  $name
-     * @param  string  $type
-     * @param  string  $id
-     * @return array
+     * @param  TType  $type
+     * @param  TId  $id
+     * @return array{non-empty-string, non-empty-string}
+     * @phpstan-return ($type is non-empty-string
+     *                    ? ($id is non-empty-string ? array{TType, TId} : array{TType, non-empty-string})
+     *                    : ($id is non-empty-string ? {non-empty-string, TId} : {non-empty-string, non-empty-string})
+     * )
      */
     protected function getMorphs($name, $type, $id)
     {
@@ -1055,7 +1062,7 @@ trait HasRelationships
     /**
      * Get all the loaded relations for the instance.
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function getRelations()
     {
@@ -1116,7 +1123,7 @@ trait HasRelationships
     /**
      * Set the entire relations array on the model.
      *
-     * @param  array  $relations
+     * @param  array<string, mixed>  $relations
      * @return $this
      */
     public function setRelations(array $relations)
