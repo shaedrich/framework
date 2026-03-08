@@ -997,7 +997,7 @@ trait HasRelationships
      * @return array{non-empty-string, non-empty-string}
      * @phpstan-return ($type is non-empty-string
      *                    ? ($id is non-empty-string ? array{TType, TId} : array{TType, non-empty-string})
-     *                    : ($id is non-empty-string ? {non-empty-string, TId} : {non-empty-string, non-empty-string})
+     *                    : ($id is non-empty-string ? array{non-empty-string, TId} : array{non-empty-string, non-empty-string})
      * )
      */
     protected function getMorphs($name, $type, $id)
