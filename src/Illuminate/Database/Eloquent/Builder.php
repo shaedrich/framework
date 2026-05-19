@@ -1711,7 +1711,7 @@ class Builder implements BuilderContract
      *
      * @param  array  $whereSlice
      * @param  string  $boolean
-     * @return array
+     * @return array{type: 'Nested', 'query' => \Illuminate\Database\Query\Builder, boolean: 'and'}
      */
     protected function createNestedWhere($whereSlice, $boolean = 'and')
     {
@@ -1773,7 +1773,7 @@ class Builder implements BuilderContract
     /**
      * Create a new instance of the model being queried.
      *
-     * @param  array  $attributes
+     * @param  array<string, mixed>  $attributes
      * @return TModel
      */
     public function newModelInstance($attributes = [])
@@ -1789,7 +1789,8 @@ class Builder implements BuilderContract
      * Parse a list of relations into individuals.
      *
      * @param  array  $relations
-     * @return array
+     * @return array<string, \Closure(self): self>
+     * @phpstan-return ($relations is array{} ? array{} : array<string, \Closure(self): self>)
      */
     protected function parseWithRelations(array $relations)
     {
@@ -1816,7 +1817,7 @@ class Builder implements BuilderContract
      *
      * @param  array  $relations
      * @param  string  $prefix
-     * @return array
+     * @return array<string, array<\Closure(self): self>>
      */
     protected function prepareNestedWithRelationships($relations, $prefix = '')
     {
@@ -1867,8 +1868,8 @@ class Builder implements BuilderContract
     /**
      * Combine an array of constraints into a single constraint.
      *
-     * @param  array  $constraints
-     * @return \Closure
+     * @param  array<\Closure(self): self|null>  $constraints
+     * @return \Closure(self): self 
      */
     protected function combineConstraints(array $constraints)
     {
@@ -1885,7 +1886,7 @@ class Builder implements BuilderContract
      * Parse the attribute select constraints from the name.
      *
      * @param  string  $name
-     * @return array
+     * @return array{string, Closure(self): void}
      */
     protected function parseNameAndAttributeSelectionConstraint($name)
     {
@@ -1900,7 +1901,7 @@ class Builder implements BuilderContract
      * Create a constraint to select the given columns for the relation.
      *
      * @param  string  $name
-     * @return array
+     * @return array{string, Closure(self): void}
      */
     protected function createSelectWithConstraint($name)
     {
@@ -1916,9 +1917,11 @@ class Builder implements BuilderContract
     /**
      * Parse the nested relationships in a relation.
      *
+     * @template TResults of array<string, Closure()>
+     *
      * @param  string  $name
-     * @param  array  $results
-     * @return array
+     * @param  TResults  $results
+     * @return TResults
      */
     protected function addNestedWiths($name, $results)
     {
@@ -2159,8 +2162,8 @@ class Builder implements BuilderContract
     /**
      * Qualify the given columns with the model's table.
      *
-     * @param  array|\Illuminate\Contracts\Database\Query\Expression  $columns
-     * @return array
+     * @param  string[]  $columns
+     * @return string[]
      */
     public function qualifyColumns($columns)
     {
