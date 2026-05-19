@@ -30,7 +30,7 @@ trait QueriesRelationships
      * @param  \Illuminate\Database\Eloquent\Relations\Relation<TRelatedModel, *, *>|string  $relation
      * @param  string  $operator
      * @param  \Illuminate\Contracts\Database\Query\Expression|int  $count
-     * @param  string  $boolean
+     * @param  'and'|'or'  $boolean
      * @param  (\Closure(\Illuminate\Database\Eloquent\Builder<TRelatedModel>): mixed)|null  $callback
      * @return $this
      *
@@ -81,7 +81,7 @@ trait QueriesRelationships
      * @param  string  $relations
      * @param  string  $operator
      * @param  \Illuminate\Contracts\Database\Query\Expression|int  $count
-     * @param  string  $boolean
+     * @param  'and'|'or'  $boolean
      * @param  (\Closure(\Illuminate\Database\Eloquent\Builder<*>): mixed)|null  $callback
      * @return $this
      */
@@ -136,7 +136,7 @@ trait QueriesRelationships
      * @template TRelatedModel of \Illuminate\Database\Eloquent\Model
      *
      * @param  \Illuminate\Database\Eloquent\Relations\Relation<TRelatedModel, *, *>|string  $relation
-     * @param  string  $boolean
+     * @param  'and'|'or'  $boolean
      * @param  (\Closure(\Illuminate\Database\Eloquent\Builder<TRelatedModel>): mixed)|null  $callback
      * @return $this
      */
@@ -242,7 +242,7 @@ trait QueriesRelationships
      * @param  string|array<int, string>  $types
      * @param  string  $operator
      * @param  \Illuminate\Contracts\Database\Query\Expression|int  $count
-     * @param  string  $boolean
+     * @param  'and'|'or'  $boolean
      * @param  (\Closure(\Illuminate\Database\Eloquent\Builder<TRelatedModel>, string): mixed)|null  $callback
      * @return $this
      */
@@ -341,7 +341,7 @@ trait QueriesRelationships
      *
      * @param  \Illuminate\Database\Eloquent\Relations\MorphTo<TRelatedModel, *>|string  $relation
      * @param  string|array<int, string>  $types
-     * @param  string  $boolean
+     * @param  'and'|'or'  $boolean
      * @param  (\Closure(\Illuminate\Database\Eloquent\Builder<TRelatedModel>, string): mixed)|null  $callback
      * @return $this
      */
@@ -726,7 +726,7 @@ trait QueriesRelationships
      *
      * @param  \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection<int, \Illuminate\Database\Eloquent\Model>  $related
      * @param  string|null  $relationshipName
-     * @param  string  $boolean
+     * @param  'and'|'or'  $boolean
      * @return $this
      *
      * @throws \InvalidArgumentException
@@ -786,7 +786,7 @@ trait QueriesRelationships
      *
      * @param  \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection<int, \Illuminate\Database\Eloquent\Model>  $related
      * @param  string|null  $relationshipName
-     * @param  string  $boolean
+     * @param  'and'|'or'  $boolean
      * @return $this
      *
      * @throws \InvalidArgumentException
@@ -1033,7 +1033,7 @@ trait QueriesRelationships
      * @param  \Illuminate\Database\Eloquent\Relations\Relation<*, *, *>  $relation
      * @param  string  $operator
      * @param  \Illuminate\Contracts\Database\Query\Expression|int  $count
-     * @param  string  $boolean
+     * @param  'and'|'or'  $boolean
      * @return $this
      */
     protected function addHasWhere(Builder $hasQuery, Relation $relation, $operator, $count, $boolean)
@@ -1097,7 +1097,7 @@ trait QueriesRelationships
      * @param  \Illuminate\Database\Query\Builder  $query
      * @param  string  $operator
      * @param  \Illuminate\Contracts\Database\Query\Expression|int  $count
-     * @param  string  $boolean
+     * @param  'and'|'or'  $boolean
      * @return $this
      */
     protected function addWhereCountQuery(QueryBuilder $query, $operator = '>=', $count = 1, $boolean = 'and')
@@ -1131,6 +1131,7 @@ trait QueriesRelationships
      * @param  string  $operator
      * @param  \Illuminate\Contracts\Database\Query\Expression|int  $count
      * @return bool
+     * @phpstan-return ($operator is '>='|'<' ? ($count is 1 ? true : false) : false)
      */
     protected function canUseExistsForExistenceCheck($operator, $count)
     {
