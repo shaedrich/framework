@@ -878,9 +878,12 @@ trait EnumeratesValues
     /**
      * Reduce the collection to multiple aggregate values.
      *
-     * @param  callable  $callback
+     * @template TResult of array
+     *
+     * @param  callable(): TResult  $callback
+     * @param-immediately-invoked-callable  $callback
      * @param  mixed  ...$initial
-     * @return array
+     * @return TResult
      *
      * @throws \UnexpectedValueException
      */
