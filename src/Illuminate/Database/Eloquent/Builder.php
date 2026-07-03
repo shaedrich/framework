@@ -1618,9 +1618,12 @@ class Builder implements BuilderContract
     /**
      * Apply the given scope on the current builder instance.
      *
-     * @param  callable  $scope
-     * @param  array  $parameters
-     * @return mixed
+     * @template TResult
+     * @template TParameter
+     *
+     * @param  callable(...TParameter): TResult  $scope
+     * @param  array<array-key, TParameter>  $parameters
+     * @return TResult|$this
      */
     protected function callScope(callable $scope, array $parameters = [])
     {
