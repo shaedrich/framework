@@ -131,10 +131,13 @@ class Queue extends Facade
 
     /**
      * Replace the bound instance with a fake during the given callable's execution.
+     * 
+     * @template TReturn
      *
-     * @param  callable  $callable
+     * @param  callable(): TReturn  $callable
+     * @param-immediately-invoked-callable  $callable
      * @param  array  $jobsToFake
-     * @return mixed
+     * @return TReturn
      */
     public static function fakeFor(callable $callable, array $jobsToFake = [])
     {
@@ -152,9 +155,13 @@ class Queue extends Facade
     /**
      * Replace the bound instance with a fake during the given callable's execution.
      *
+     * @template TReturn
+     *
+     * @param  callable(): TReturn  $callable
      * @param  callable  $callable
+     * @param-immediately-invoked-callable  $callable
      * @param  array  $jobsToAllow
-     * @return mixed
+     * @return TReturn
      */
     public static function fakeExceptFor(callable $callable, array $jobsToAllow = [])
     {
