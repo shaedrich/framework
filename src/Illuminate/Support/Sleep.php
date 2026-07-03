@@ -277,8 +277,11 @@ class Sleep
     /**
      * Specify a callback that should be executed after sleeping.
      *
-     * @param  callable  $then
-     * @return mixed
+     * @template TResult
+     *
+     * @param  callable(TResult)  $then
+     * @param-immediately-invoked-callable  $then
+     * @return TResult
      */
     public function then(callable $then)
     {
