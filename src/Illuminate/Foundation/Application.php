@@ -1168,7 +1168,8 @@ class Application extends Container implements ApplicationContract, CachesConfig
     /**
      * Register a new "booted" listener.
      *
-     * @param  callable  $callback
+     * @param  callable($this)  $callback
+     * @param-immediately-invoked-callable  $callback
      * @return void
      */
     public function booted($callback)
