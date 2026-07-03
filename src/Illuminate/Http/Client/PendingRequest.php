@@ -1008,7 +1008,8 @@ class PendingRequest
     /**
      * Send a pool of asynchronous requests concurrently, with callbacks for introspection.
      *
-     * @param  callable  $callback
+     * @param  callable(\Illuminate\Http\Client\Batch): \Illuminate\Http\Client\Batch  $callback
+     * @param-immediately-invoked-callable  $callback
      * @return \Illuminate\Http\Client\Batch
      */
     public function batch(callable $callback): Batch
