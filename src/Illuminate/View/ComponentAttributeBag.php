@@ -134,7 +134,8 @@ class ComponentAttributeBag implements Arrayable, ArrayAccess, IteratorAggregate
     /**
      * Filter the attributes, returning a bag of attributes that pass the filter.
      *
-     * @param  callable  $callback
+     * @param  callable(mixed, array-key): bool  $callback
+     * @param-immediately-invoked-callable  $callback
      * @return static
      */
     public function filter($callback)
