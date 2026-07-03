@@ -62,9 +62,12 @@ class WithoutOverlapping
     /**
      * Process the job.
      *
-     * @param  mixed  $job
-     * @param  callable  $next
-     * @return mixed
+     * @template TJob
+     *
+     * @param  TJob  $job
+     * @param  callable(TJob)  $next
+     * @param-immediately-invoked-callable  $next
+     * @return void
      */
     public function handle($job, $next)
     {
