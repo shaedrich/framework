@@ -117,9 +117,12 @@ class ConcurrencyLimiterBuilder
     /**
      * Execute the given callback if a lock is obtained, otherwise call the failure callback.
      *
+     * @template TReturn
+     *
      * @param  callable  $callback
-     * @param  callable|null  $failure
-     * @return mixed
+     * @param  (callable(\Illuminate\Cache\Limiters\LimiterTimeoutException): TReturn)|null  $failure
+     * @param-immediately-invoked-callable  $failure
+     * @return TReturn|null
      *
      * @throws \Illuminate\Cache\Limiters\LimiterTimeoutException
      */
