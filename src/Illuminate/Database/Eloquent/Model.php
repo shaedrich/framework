@@ -503,6 +503,7 @@ abstract class Model implements Arrayable, ArrayAccess, CanBeEscapedWhenCastToSt
      * Disables relationship model touching for the current class during given callback scope.
      *
      * @param  callable  $callback
+     * @param-immediately-invoked-callable  $callback
      * @return void
      */
     public static function withoutTouching(callable $callback)
@@ -515,6 +516,7 @@ abstract class Model implements Arrayable, ArrayAccess, CanBeEscapedWhenCastToSt
      *
      * @param  array  $models
      * @param  callable  $callback
+     * @param-immediately-invoked-callable  $callback
      * @return void
      */
     public static function withoutTouchingOn(array $models, callable $callback)
