@@ -1033,10 +1033,12 @@ class BladeCompiler extends Compiler implements CompilerInterface
 
     /**
      * Execute the given callback using a custom echo format.
+     * @template TReturn of string
      *
      * @param  string  $format
-     * @param  callable  $callback
-     * @return string
+     * @param  callable(): TReturn  $callback
+     * @param-immediately-invoked-callable  $callback
+     * @return TReturn
      */
     public function usingEchoFormat($format, callable $callback)
     {
