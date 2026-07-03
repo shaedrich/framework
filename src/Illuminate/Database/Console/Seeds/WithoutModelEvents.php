@@ -9,8 +9,11 @@ trait WithoutModelEvents
     /**
      * Prevent model events from being dispatched by the given callback.
      *
-     * @param  callable  $callback
-     * @return callable
+     * @template TReturn
+     *
+     * @param  callable(): TReturn  $callback
+     * @param-immediately-invoked-callable  $callback
+     * @return TReturn
      */
     public function withoutModelEvents(callable $callback)
     {
