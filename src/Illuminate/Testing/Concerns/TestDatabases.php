@@ -130,6 +130,7 @@ trait TestDatabases
      *
      * @param  string  $database
      * @param  callable  $callable
+     * @param-immediately-invoked-callable  $callable
      * @return void
      */
     protected function usingDatabase($database, $callable)
@@ -147,7 +148,8 @@ trait TestDatabases
     /**
      * Apply the given callback when tests are not using in memory database.
      *
-     * @param  callable  $callback
+     * @param  callable(string)  $callback
+     * @param-immediately-invoked-callable  $callback
      * @return void
      */
     protected function whenNotUsingInMemoryDatabase($callback)
