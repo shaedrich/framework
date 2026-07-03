@@ -37,9 +37,13 @@ class ThrottlesExceptionsWithRedis extends ThrottlesExceptions
     /**
      * Process the job.
      *
-     * @param  mixed  $job
-     * @param  callable  $next
-     * @return mixed
+     * @template TJob
+     * @template TReturn
+     * 
+     * @param  TJob  $job
+     * @param  callable(TJob): TReturn  $next
+     * @param-immediately-invoked-callable  $next
+     * @return TReturn
      *
      * @throws \Throwable
      */
