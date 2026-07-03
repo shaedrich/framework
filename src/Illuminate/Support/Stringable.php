@@ -640,7 +640,8 @@ class Stringable implements JsonSerializable, ArrayAccess, BaseStringable
     /**
      * Call the given callback and return a new string.
      *
-     * @param  callable  $callback
+     * @param  callable($this): string  $callback
+     * @param-immediately-invoked-callable  $callback
      * @return static
      */
     public function pipe(callable $callback)
@@ -1156,8 +1157,10 @@ class Stringable implements JsonSerializable, ArrayAccess, BaseStringable
      * Execute the given callback if the string contains a given substring.
      *
      * @param  string|iterable<string>  $needles
-     * @param  callable  $callback
-     * @param  callable|null  $default
+     * @param  callable($this, bool): static  $callback
+     * @param-immediately-invoked-callable  $callback
+     * @param  (callable($this, bool): static)|null  $default
+     * @param-immediately-invoked-callable  $default
      * @return static
      */
     public function whenContains($needles, $callback, $default = null)
@@ -1169,8 +1172,10 @@ class Stringable implements JsonSerializable, ArrayAccess, BaseStringable
      * Execute the given callback if the string contains all array values.
      *
      * @param  iterable<string>  $needles
-     * @param  callable  $callback
-     * @param  callable|null  $default
+     * @param  callable($this, bool): static  $callback
+     * @param-immediately-invoked-callable  $callback
+     * @param  (callable($this, bool): static)|null  $default
+     * @param-immediately-invoked-callable  $default
      * @return static
      */
     public function whenContainsAll(array $needles, $callback, $default = null)
@@ -1181,8 +1186,10 @@ class Stringable implements JsonSerializable, ArrayAccess, BaseStringable
     /**
      * Execute the given callback if the string is empty.
      *
-     * @param  callable  $callback
-     * @param  callable|null  $default
+     * @param  callable($this, bool): static  $callback
+     * @param-immediately-invoked-callable  $callback
+     * @param  (callable($this, bool): static)|null  $default
+     * @param-immediately-invoked-callable  $default
      * @return static
      */
     public function whenEmpty($callback, $default = null)
@@ -1193,8 +1200,10 @@ class Stringable implements JsonSerializable, ArrayAccess, BaseStringable
     /**
      * Execute the given callback if the string is not empty.
      *
-     * @param  callable  $callback
-     * @param  callable|null  $default
+     * @param  callable($this, bool): static  $callback
+     * @param-immediately-invoked-callable  $callback
+     * @param  (callable($this, bool): static)|null  $default
+     * @param-immediately-invoked-callable  $default
      * @return static
      */
     public function whenNotEmpty($callback, $default = null)
@@ -1206,8 +1215,10 @@ class Stringable implements JsonSerializable, ArrayAccess, BaseStringable
      * Execute the given callback if the string ends with a given substring.
      *
      * @param  string|iterable<string>  $needles
-     * @param  callable  $callback
-     * @param  callable|null  $default
+     * @param  callable($this, bool): static  $callback
+     * @param-immediately-invoked-callable  $callback
+     * @param  (callable($this, bool): static)|null  $default
+     * @param-immediately-invoked-callable  $default
      * @return static
      */
     public function whenEndsWith($needles, $callback, $default = null)
@@ -1219,8 +1230,10 @@ class Stringable implements JsonSerializable, ArrayAccess, BaseStringable
      * Execute the given callback if the string doesn't end with a given substring.
      *
      * @param  string|iterable<string>  $needles
-     * @param  callable  $callback
-     * @param  callable|null  $default
+     * @param  callable($this, bool): static  $callback
+     * @param-immediately-invoked-callable  $callback
+     * @param  (callable($this, bool): static)|null  $default
+     * @param-immediately-invoked-callable  $default
      * @return static
      */
     public function whenDoesntEndWith($needles, $callback, $default = null)
@@ -1232,8 +1245,10 @@ class Stringable implements JsonSerializable, ArrayAccess, BaseStringable
      * Execute the given callback if the string is an exact match with the given value.
      *
      * @param  string  $value
-     * @param  callable  $callback
-     * @param  callable|null  $default
+     * @param  callable($this, bool): static  $callback
+     * @param-immediately-invoked-callable  $callback
+     * @param  (callable($this, bool): static)|null  $default
+     * @param-immediately-invoked-callable  $default
      * @return static
      */
     public function whenExactly($value, $callback, $default = null)
@@ -1245,8 +1260,10 @@ class Stringable implements JsonSerializable, ArrayAccess, BaseStringable
      * Execute the given callback if the string is not an exact match with the given value.
      *
      * @param  string  $value
-     * @param  callable  $callback
-     * @param  callable|null  $default
+     * @param  callable($this, bool): static  $callback
+     * @param-immediately-invoked-callable  $callback
+     * @param  (callable($this, bool): static)|null  $default
+     * @param-immediately-invoked-callable  $default
      * @return static
      */
     public function whenNotExactly($value, $callback, $default = null)
@@ -1258,8 +1275,10 @@ class Stringable implements JsonSerializable, ArrayAccess, BaseStringable
      * Execute the given callback if the string matches a given pattern.
      *
      * @param  string|iterable<string>  $pattern
-     * @param  callable  $callback
-     * @param  callable|null  $default
+     * @param  callable($this, bool): static  $callback
+     * @param-immediately-invoked-callable  $callback
+     * @param  (callable($this, bool): static)|null  $default
+     * @param-immediately-invoked-callable  $default
      * @return static
      */
     public function whenIs($pattern, $callback, $default = null)
@@ -1270,8 +1289,10 @@ class Stringable implements JsonSerializable, ArrayAccess, BaseStringable
     /**
      * Execute the given callback if the string is 7 bit ASCII.
      *
-     * @param  callable  $callback
-     * @param  callable|null  $default
+     * @param  callable($this, bool): static  $callback
+     * @param-immediately-invoked-callable  $callback
+     * @param  (callable($this, bool): static)|null  $default
+     * @param-immediately-invoked-callable  $default
      * @return static
      */
     public function whenIsAscii($callback, $default = null)
@@ -1282,8 +1303,10 @@ class Stringable implements JsonSerializable, ArrayAccess, BaseStringable
     /**
      * Execute the given callback if the string is a valid UUID.
      *
-     * @param  callable  $callback
-     * @param  callable|null  $default
+     * @param  callable($this, bool): static  $callback
+     * @param-immediately-invoked-callable  $callback
+     * @param  (callable($this, bool): static)|null  $default
+     * @param-immediately-invoked-callable  $default
      * @return static
      */
     public function whenIsUuid($callback, $default = null)
@@ -1294,8 +1317,10 @@ class Stringable implements JsonSerializable, ArrayAccess, BaseStringable
     /**
      * Execute the given callback if the string is a valid ULID.
      *
-     * @param  callable  $callback
-     * @param  callable|null  $default
+     * @param  callable($this, bool): static  $callback
+     * @param-immediately-invoked-callable  $callback
+     * @param  (callable($this, bool): static)|null  $default
+     * @param-immediately-invoked-callable  $default
      * @return static
      */
     public function whenIsUlid($callback, $default = null)
@@ -1307,8 +1332,10 @@ class Stringable implements JsonSerializable, ArrayAccess, BaseStringable
      * Execute the given callback if the string starts with a given substring.
      *
      * @param  string|iterable<string>  $needles
-     * @param  callable  $callback
-     * @param  callable|null  $default
+     * @param  callable($this, bool): static  $callback
+     * @param-immediately-invoked-callable  $callback
+     * @param  (callable($this, bool): static)|null  $default
+     * @param-immediately-invoked-callable  $default
      * @return static
      */
     public function whenStartsWith($needles, $callback, $default = null)
@@ -1320,8 +1347,10 @@ class Stringable implements JsonSerializable, ArrayAccess, BaseStringable
      * Execute the given callback if the string doesn't start with a given substring.
      *
      * @param  string|iterable<string>  $needles
-     * @param  callable  $callback
-     * @param  callable|null  $default
+     * @param  callable($this, bool): static  $callback
+     * @param-immediately-invoked-callable  $callback
+     * @param  (callable($this, bool): static)|null  $default
+     * @param-immediately-invoked-callable  $default
      * @return static
      */
     public function whenDoesntStartWith($needles, $callback, $default = null)
@@ -1333,8 +1362,10 @@ class Stringable implements JsonSerializable, ArrayAccess, BaseStringable
      * Execute the given callback if the string matches the given pattern.
      *
      * @param  string  $pattern
-     * @param  callable  $callback
-     * @param  callable|null  $default
+     * @param  callable($this, bool): static  $callback
+     * @param-immediately-invoked-callable  $callback
+     * @param  (callable($this, bool): static)|null  $default
+     * @param-immediately-invoked-callable  $default
      * @return static
      */
     public function whenTest($pattern, $callback, $default = null)
