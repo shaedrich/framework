@@ -98,8 +98,11 @@ abstract class Component
     /**
      * Eventually performs a question using the component's question helper.
      *
-     * @param  callable  $callable
-     * @return mixed
+     * @template TReturn
+     *
+     * @param  callable(): TReturn  $callable
+     * @param-immediately-invoked-callable  $callable
+     * @return TReturn
      */
     protected function usingQuestionHelper($callable)
     {
