@@ -354,12 +354,17 @@ abstract class Queue
     /**
      * Enqueue a job using the given callback.
      *
+     * @template TQueue of string|null
+     * @template TDelay of \DateTimeInterface|\DateInterval|int|null
+     * @template TResult of string|int|null
+     *
      * @param  \Closure|string|object  $job
      * @param  string  $payload
-     * @param  string|null  $queue
-     * @param  \DateTimeInterface|\DateInterval|int|null  $delay
-     * @param  callable  $callback
-     * @return mixed
+     * @param  TQueue  $queue
+     * @param  TDelay  $delay
+     * @param  (callable(string, TQueue, TDelay): TResult)  $callback
+     * @param-immediately-invoked-callable  $callback
+     * @return TResult
      */
     protected function enqueueUsing($job, $payload, $queue, $delay, $callback)
     {
