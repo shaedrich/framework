@@ -1039,9 +1039,12 @@ class BelongsToMany extends Relation
     /**
      * Chunk the results of the query.
      *
+     * @template TReturn of bool
+     *
      * @param  int  $count
-     * @param  callable  $callback
-     * @return bool
+     * @param  callable(\Illuminate\Support\Collection<int, TRelatedModel>, int): TReturn  $callback
+     * @param-immediately-invoked-callable  $callback
+     * @return TReturn
      */
     public function chunk($count, callable $callback)
     {
@@ -1055,8 +1058,11 @@ class BelongsToMany extends Relation
     /**
      * Chunk the results of a query by comparing numeric IDs.
      *
+     * @template TReturn of bool
+     *
      * @param  int  $count
-     * @param  callable  $callback
+     * @param  callable(\Illuminate\Support\Collection<int, TRelatedModel>, int): TReturn  $callback
+     * @param-immediately-invoked-callable  $callback
      * @param  string|null  $column
      * @param  string|null  $alias
      * @return bool
@@ -1069,8 +1075,11 @@ class BelongsToMany extends Relation
     /**
      * Chunk the results of a query by comparing IDs in descending order.
      *
+     * @template TReturn of bool
+     *
      * @param  int  $count
-     * @param  callable  $callback
+     * @param  callable(\Illuminate\Support\Collection<int, TRelatedModel>, int): TReturn  $callback
+     * @param-immediately-invoked-callable  $callback
      * @param  string|null  $column
      * @param  string|null  $alias
      * @return bool
@@ -1083,8 +1092,11 @@ class BelongsToMany extends Relation
     /**
      * Execute a callback over each item while chunking by ID.
      *
-     * @param  callable  $callback
+     * @template TReturn of bool
+     *
      * @param  int  $count
+     * @param  callable(\Illuminate\Support\Collection<int, TRelatedModel>, int): TReturn  $callback
+     * @param-immediately-invoked-callable  $callback
      * @param  string|null  $column
      * @param  string|null  $alias
      * @return bool
@@ -1103,8 +1115,11 @@ class BelongsToMany extends Relation
     /**
      * Chunk the results of a query by comparing IDs in a given order.
      *
+     * @template TReturn of bool
+     *
      * @param  int  $count
-     * @param  callable  $callback
+     * @param  callable(\Illuminate\Support\Collection<int, TRelatedModel>, int): TReturn  $callback
+     * @param-immediately-invoked-callable  $callback
      * @param  string|null  $column
      * @param  string|null  $alias
      * @param  SortDirection|bool  $descending
@@ -1128,7 +1143,8 @@ class BelongsToMany extends Relation
     /**
      * Execute a callback over each item while chunking.
      *
-     * @param  callable  $callback
+     * @param  callable(TRelatedModel, int): bool  $callback
+     * @param-immediately-invoked-callable  $callback
      * @param  int  $count
      * @return bool
      */
