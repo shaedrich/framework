@@ -40,10 +40,13 @@ class RateLimitedWithRedis extends RateLimited
     /**
      * Handle a rate limited job.
      *
-     * @param  mixed  $job
-     * @param  callable  $next
-     * @param  array  $limits
-     * @return mixed
+     * @template TJob
+     * @template TResult
+     *
+     * @param  TJob  $job
+     * @param  callable(TJob): TResult  $next
+     * @param  \Illuminate\Cache\RateLimiting\Limit[]  $limits
+     * @return TResult
      */
     protected function handleJob($job, $next, array $limits)
     {
