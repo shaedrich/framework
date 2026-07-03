@@ -137,6 +137,7 @@ trait InteractsWithRedis
      * Run test if redis is available.
      *
      * @param  callable  $callback
+     * @param-immediately-invoked-callable  $callback
      * @return void
      */
     public function ifRedisAvailable($callback)
