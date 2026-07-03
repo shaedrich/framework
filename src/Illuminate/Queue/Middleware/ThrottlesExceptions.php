@@ -101,11 +101,13 @@ class ThrottlesExceptions
     /**
      * Process the job.
      *
-     * @param  mixed  $job
-     * @param  callable  $next
-     * @return mixed
-     *
-     * @throws \Throwable
+     * @template TJob
+     * @template TReturn
+     * 
+     * @param  TJob  $job
+     * @param  callable(TJob): TReturn  $next
+     * @param-immediately-invoked-callable  $next
+     * @return TReturn
      */
     public function handle($job, $next)
     {
