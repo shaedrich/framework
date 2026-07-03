@@ -291,6 +291,7 @@ trait InteractsWithTestCaseLifecycle
      * Register a callback to be run after the application is created.
      *
      * @param  callable  $callback
+     * @param-immediately-invoked-callable  $callback
      * @return void
      */
     public function afterApplicationCreated(callable $callback)
