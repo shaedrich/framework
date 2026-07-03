@@ -1323,7 +1323,8 @@ class Validator implements ValidatorContract
      *
      * @param  string|array  $attribute
      * @param  string|array  $rules
-     * @param  callable  $callback
+     * @param  callable(\Illuminate\Support\Fluent, \Illuminate\Support\Fluent|mixed)  $callback
+     * @param-immediately-invoked-callable  $callback
      * @return $this
      */
     public function sometimes($attribute, $rules, callable $callback)
