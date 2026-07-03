@@ -480,7 +480,11 @@ class Batch implements Arrayable, JsonSerializable
     /**
      * Invoke a batch callback handler.
      *
-     * @param  callable  $handler
+     * @template TThrowable
+     *
+     * @param  callable(Illuminate\Bus\Batch, TThrowable)  $handler
+     * @param-immediately-invoked-callable  $handler
+     * @param  ?TThrowable  $e
      * @return void
      */
     protected function invokeHandlerCallback($handler, Batch $batch, ?Throwable $e = null)
