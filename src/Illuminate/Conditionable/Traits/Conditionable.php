@@ -49,8 +49,11 @@ trait Conditionable
      * @template TUnlessReturnType
      *
      * @param  (\Closure($this): TUnlessParameter)|TUnlessParameter|null  $value
-     * @param  (callable($this, TUnlessParameter): TUnlessReturnType)|null  $callback
-     * @param  (callable($this, TUnlessParameter): TUnlessReturnType)|null  $default
+     * @param-immediately-invoked-callable  $value
+     * @param  (callable($this, TWhenParameter): TWhenReturnType)|null  $callback
+     * @param-immediately-invoked-callable  $callback
+     * @param  (callable($this, TWhenParameter): TWhenReturnType)|null  $default
+     * @param-immediately-invoked-callable  $default
      * @return $this|TUnlessReturnType
      */
     public function unless($value = null, ?callable $callback = null, ?callable $default = null)
