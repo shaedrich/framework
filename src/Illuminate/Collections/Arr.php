@@ -830,9 +830,13 @@ class Arr
     /**
      * Run a map over each of the items in the array.
      *
-     * @param  array  $array
-     * @param  callable  $callback
-     * @return array
+     * @template TArray of array<array-key, mixed>
+     * @template TValue
+     *
+     * @param  TArray  $array
+     * @param  callable(value-of<TArray>, key-of<TArray>=): TValue  $callback
+     * @param-immediately-invoked-callable  $callback
+     * @return array<key-of<TArray>, TValue>
      */
     public static function map(array $array, callable $callback)
     {
