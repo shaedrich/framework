@@ -442,6 +442,7 @@ trait HasEvents
      * @template TReturn
      *
      * @param  callable(): TReturn  $callback
+     * @param-immediately-invoked-callable  $callback
      * @return TReturn
      */
     public static function withoutEvents(callable $callback)
