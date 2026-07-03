@@ -104,6 +104,7 @@ class Signals
      * Execute the given callback if "signals" should be used and are available.
      *
      * @param  callable  $callback
+     * @param-immediately-invoked-callable  $callback
      * @return void
      */
     public static function whenAvailable($callback)
