@@ -311,6 +311,7 @@ class ArtisanCommandTest extends TestCase
      * in PendingCommand cause PHPUnit tearDown() to later throw the exception.
      *
      * @param  callable  $callback
+     * @param-immediately-invoked-callable  $callback
      * @return void
      */
     protected function ignoringMockOnceExceptions(callable $callback)
