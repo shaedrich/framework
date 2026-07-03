@@ -304,7 +304,8 @@ abstract class ServiceProvider
      * Setup an after resolving listener, or fire immediately if already resolved.
      *
      * @param  string  $name
-     * @param  callable  $callback
+     * @param  callable(mixed, \Illuminate\Contracts\Foundation\Application)  $callback
+     * @param-immediately-invoked-callable  $callback
      * @return void
      */
     protected function callAfterResolving($name, $callback)
