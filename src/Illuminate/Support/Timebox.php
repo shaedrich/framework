@@ -19,10 +19,9 @@ class Timebox
      * @template TCallReturnType
      *
      * @param  (callable($this): TCallReturnType)  $callback
+     * @param-immediately-invoked-callable  $callback
      * @param  int  $microseconds
      * @return TCallReturnType
-     *
-     * @throws \Throwable
      */
     public function call(callable $callback, int $microseconds)
     {
