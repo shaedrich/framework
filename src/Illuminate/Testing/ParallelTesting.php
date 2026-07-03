@@ -305,6 +305,7 @@ class ParallelTesting
      * Apply the callback if tests are running in parallel.
      *
      * @param  callable  $callback
+     * @param-immediately-invoked-callable  $callback
      * @return void
      */
     protected function whenRunningInParallel($callback)
