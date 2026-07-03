@@ -82,10 +82,12 @@ class Event extends Facade
 
     /**
      * Replace the bound instance with a fake during the given callable's execution.
+     * @template TReturnType
      *
-     * @param  callable  $callable
+     * @param  callable(): TReturnType  $callable
+     * @param-immediately-invoked-callable  $callable
      * @param  array  $eventsToFake
-     * @return mixed
+     * @return TReturnType
      */
     public static function fakeFor(callable $callable, array $eventsToFake = [])
     {
@@ -106,9 +108,12 @@ class Event extends Facade
     /**
      * Replace the bound instance with a fake during the given callable's execution.
      *
-     * @param  callable  $callable
+     * @template TReturnType
+     *
+     * @param  callable(): TReturnType  $callable
+     * @param-immediately-invoked-callable  $callable
      * @param  array  $eventsToAllow
-     * @return mixed
+     * @return TReturnType
      */
     public static function fakeExceptFor(callable $callable, array $eventsToAllow = [])
     {
