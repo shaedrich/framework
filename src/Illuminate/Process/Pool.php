@@ -61,6 +61,7 @@ class Pool
      * Start all of the processes in the pool.
      *
      * @param  callable|null  $output
+     * @param-immediately-invoked-callable  $output
      * @return \Illuminate\Process\InvokedProcessPool
      *
      * @throws \InvalidArgumentException
