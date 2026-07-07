@@ -13,6 +13,7 @@ trait InteractsWithTime
      * Freeze time.
      *
      * @param  (callable(\Illuminate\Support\Carbon): TReturn)|null  $callback
+     * @param-immediately-invoked-callable  $callback
      * @return ($callback is null ? \Illuminate\Support\Carbon : TReturn)
      */
     public function freezeTime($callback = null)
@@ -28,6 +29,7 @@ trait InteractsWithTime
      * Freeze time at the beginning of the current second.
      *
      * @param  (callable(\Illuminate\Support\Carbon): TReturn)|null  $callback
+     * @param-immediately-invoked-callable  $callback
      * @return ($callback is null ? \Illuminate\Support\Carbon : TReturn)
      */
     public function freezeSecond($callback = null)
@@ -56,6 +58,7 @@ trait InteractsWithTime
      *
      * @param  TDate  $date
      * @param  (callable(TDate): TReturn)|null  $callback
+     * @param-immediately-invoked-callable  $callback
      * @return ($callback is null ? void : TReturn)
      */
     public function travelTo($date, $callback = null)
