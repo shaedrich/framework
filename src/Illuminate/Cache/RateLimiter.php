@@ -292,6 +292,7 @@ class RateLimiter
      * @template TReturn
      *
      * @param  (callable(): TReturn)  $callback
+     * @param-immediately-invoked-callable  $callback
      * @return TReturn
      */
     protected function withoutSerializationOrCompression(callable $callback)
