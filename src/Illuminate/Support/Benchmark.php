@@ -41,6 +41,7 @@ class Benchmark
      * @template TReturn of mixed
      *
      * @param  (callable(): TReturn)  $callback
+     * @param-immediately-invoked-callable  $callback
      * @return array{0: TReturn, 1: float}
      */
     public static function value(callable $callback): array
