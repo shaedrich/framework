@@ -29,6 +29,7 @@ class Wormhole
      * Travel forward the given number of microseconds.
      *
      * @param  (callable(): TReturn)|null  $callback
+     * @param-immediately-invoked-callable  $callback
      * @return ($callback is null ? void : TReturn)
      */
     public function microsecond($callback = null)
@@ -42,6 +43,7 @@ class Wormhole
      * Travel forward the given number of microseconds.
      *
      * @param  (callable(): TReturn)|null  $callback
+     * @param-immediately-invoked-callable  $callback
      * @return ($callback is null ? void : TReturn)
      */
     public function microseconds($callback = null)
@@ -57,6 +59,7 @@ class Wormhole
      * Travel forward the given number of milliseconds.
      *
      * @param  (callable(): TReturn)|null  $callback
+     * @param-immediately-invoked-callable  $callback
      * @return ($callback is null ? void : TReturn)
      */
     public function millisecond($callback = null)
@@ -70,6 +73,7 @@ class Wormhole
      * Travel forward the given number of milliseconds.
      *
      * @param  (callable(): TReturn)|null  $callback
+     * @param-immediately-invoked-callable  $callback
      * @return ($callback is null ? void : TReturn)
      */
     public function milliseconds($callback = null)
@@ -85,6 +89,7 @@ class Wormhole
      * Travel forward the given number of seconds.
      *
      * @param  (callable(): TReturn)|null  $callback
+     * @param-immediately-invoked-callable  $callback
      * @return ($callback is null ? void : TReturn)
      */
     public function second($callback = null)
@@ -98,6 +103,7 @@ class Wormhole
      * Travel forward the given number of seconds.
      *
      * @param  (callable(): TReturn)|null  $callback
+     * @param-immediately-invoked-callable  $callback
      * @return ($callback is null ? void : TReturn)
      */
     public function seconds($callback = null)
@@ -113,6 +119,7 @@ class Wormhole
      * Travel forward the given number of minutes.
      *
      * @param  (callable(): TReturn)|null  $callback
+     * @param-immediately-invoked-callable  $callback
      * @return ($callback is null ? void : TReturn)
      */
     public function minute($callback = null)
@@ -126,6 +133,7 @@ class Wormhole
      * Travel forward the given number of minutes.
      *
      * @param  (callable(): TReturn)|null  $callback
+     * @param-immediately-invoked-callable  $callback
      * @return ($callback is null ? void : TReturn)
      */
     public function minutes($callback = null)
@@ -141,6 +149,7 @@ class Wormhole
      * Travel forward the given number of hours.
      *
      * @param  (callable(): TReturn)|null  $callback
+     * @param-immediately-invoked-callable  $callback
      * @return ($callback is null ? void : TReturn)
      */
     public function hour($callback = null)
@@ -154,6 +163,7 @@ class Wormhole
      * Travel forward the given number of hours.
      *
      * @param  (callable(): TReturn)|null  $callback
+     * @param-immediately-invoked-callable  $callback
      * @return ($callback is null ? void : TReturn)
      */
     public function hours($callback = null)
@@ -169,6 +179,7 @@ class Wormhole
      * Travel forward the given number of days.
      *
      * @param  (callable(): TReturn)|null  $callback
+     * @param-immediately-invoked-callable  $callback
      * @return ($callback is null ? void : TReturn)
      */
     public function day($callback = null)
@@ -182,6 +193,7 @@ class Wormhole
      * Travel forward the given number of days.
      *
      * @param  (callable(): TReturn)|null  $callback
+     * @param-immediately-invoked-callable  $callback
      * @return ($callback is null ? void : TReturn)
      */
     public function days($callback = null)
@@ -197,6 +209,7 @@ class Wormhole
      * Travel forward the given number of weeks.
      *
      * @param  (callable(): TReturn)|null  $callback
+     * @param-immediately-invoked-callable  $callback
      * @return ($callback is null ? void : TReturn)
      */
     public function week($callback = null)
@@ -210,6 +223,7 @@ class Wormhole
      * Travel forward the given number of weeks.
      *
      * @param  (callable(): TReturn)|null  $callback
+     * @param-immediately-invoked-callable  $callback
      * @return ($callback is null ? void : TReturn)
      */
     public function weeks($callback = null)
@@ -225,6 +239,7 @@ class Wormhole
      * Travel forward the given number of months.
      *
      * @param  (callable(): TReturn)|null  $callback
+     * @param-immediately-invoked-callable  $callback
      * @return ($callback is null ? void : TReturn)
      */
     public function month($callback = null)
@@ -238,6 +253,7 @@ class Wormhole
      * Travel forward the given number of months.
      *
      * @param  (callable(): TReturn)|null  $callback
+     * @param-immediately-invoked-callable  $callback
      * @return ($callback is null ? void : TReturn)
      */
     public function months($callback = null)
@@ -253,6 +269,7 @@ class Wormhole
      * Travel forward the given number of years.
      *
      * @param  (callable(): TReturn)|null  $callback
+     * @param-immediately-invoked-callable  $callback
      * @return ($callback is null ? void : TReturn)
      */
     public function year($callback = null)
@@ -266,6 +283,7 @@ class Wormhole
      * Travel forward the given number of years.
      *
      * @param  (callable(): TReturn)|null  $callback
+     * @param-immediately-invoked-callable  $callback
      * @return ($callback is null ? void : TReturn)
      */
     public function years($callback = null)
@@ -293,6 +311,7 @@ class Wormhole
      * Handle the given optional execution callback.
      *
      * @param  (callable(): TReturn)|null  $callback
+     * @param-immediately-invoked-callable  $callback
      * @return ($callback is null ? void : TReturn)
      */
     protected function handleCallback($callback)
