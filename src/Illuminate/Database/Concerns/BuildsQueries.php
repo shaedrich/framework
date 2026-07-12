@@ -34,6 +34,7 @@ trait BuildsQueries
      *
      * @param  int  $count
      * @param  callable(\Illuminate\Support\Collection<int, TValue>, int): mixed  $callback
+     * @param-immediately-invoked-callable  $callback
      * @return bool
      */
     public function chunk($count, callable $callback)
@@ -84,6 +85,7 @@ trait BuildsQueries
      * @template TReturn
      *
      * @param  callable(TValue): TReturn  $callback
+     * @param-immediately-invoked-callable  $callback
      * @param  int  $count
      * @return \Illuminate\Support\Collection<int, TReturn>
      */
@@ -104,6 +106,7 @@ trait BuildsQueries
      * Execute a callback over each item while chunking.
      *
      * @param  callable(TValue, int): mixed  $callback
+     * @param-immediately-invoked-callable  $callback
      * @param  int  $count
      * @return bool
      *
@@ -125,6 +128,7 @@ trait BuildsQueries
      *
      * @param  int  $count
      * @param  callable(\Illuminate\Support\Collection<int, TValue>, int): mixed  $callback
+     * @param-immediately-invoked-callable  $callback
      * @param  string|null  $column
      * @param  string|null  $alias
      * @return bool
@@ -139,6 +143,7 @@ trait BuildsQueries
      *
      * @param  int  $count
      * @param  callable(\Illuminate\Support\Collection<int, TValue>, int): mixed  $callback
+     * @param-immediately-invoked-callable  $callback
      * @param  string|null  $column
      * @param  string|null  $alias
      * @return bool
@@ -153,6 +158,7 @@ trait BuildsQueries
      *
      * @param  int  $count
      * @param  callable(\Illuminate\Support\Collection<int, TValue>, int): mixed  $callback
+     * @param-immediately-invoked-callable  $callback
      * @param  string|null  $column
      * @param  string|null  $alias
      * @param  SortDirection|bool  $descending
@@ -226,6 +232,7 @@ trait BuildsQueries
      * Execute a callback over each item while chunking by ID.
      *
      * @param  callable(TValue, int): mixed  $callback
+     * @param-immediately-invoked-callable  $callback
      * @param  int  $count
      * @param  string|null  $column
      * @param  string|null  $alias
@@ -590,6 +597,7 @@ trait BuildsQueries
      * Pass the query to a given callback and then return it.
      *
      * @param  callable($this): mixed  $callback
+     * @param-immediately-invoked-callable  $callback
      * @return $this
      */
     public function tap($callback)
@@ -605,6 +613,7 @@ trait BuildsQueries
      * @template TReturn
      *
      * @param  (callable($this): TReturn)  $callback
+     * @param-immediately-invoked-callable  $callback
      * @return (TReturn is null|void ? $this : TReturn)
      */
     public function pipe($callback)
