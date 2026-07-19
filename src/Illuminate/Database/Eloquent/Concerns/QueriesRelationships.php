@@ -16,6 +16,7 @@ use Illuminate\Database\Query\Expression;
 use Illuminate\Support\Collection as BaseCollection;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
+use SortDirection;
 
 use function Illuminate\Support\enum_value;
 
@@ -837,6 +838,81 @@ trait QueriesRelationships
     public function orWhereAttachedTo($related, $relationshipName = null)
     {
         return $this->whereAttachedTo($related, $relationshipName, 'or');
+    }
+
+    /**
+     * Add an "order by" relationship clause to the query.
+     *
+     * @param  \Illuminate\Database\Eloquent\Relations\Relation<TRelatedModel, *, *>|string|array{ \Illuminate\Database\Eloquent\Relations\Relation<TRelatedModel, *, *>, \Closure|\Illuminate\Database\Query\Builder|\Illuminate\Database\Eloquent\Builder<*>|\Illuminate\Contracts\Database\Query\Expression|string, SortDirection|'asc'|'desc'}  $relation
+     * @param  \Closure|\Illuminate\Database\Query\Builder|\Illuminate\Database\Eloquent\Builder<*>|\Illuminate\Contracts\Database\Query\Expression|string|(\Closure|\Illuminate\Database\Query\Builder|\Illuminate\Database\Eloquent\Builder<*>|\Illuminate\Contracts\Database\Query\Expression|string)[]|null  $column
+     * @param  SortDirection|'asc'|'desc'|null  $direction
+     */
+    public function orderByRelation($relation, $column = null, $direction = null)
+    {
+        if (func_num_args() === 1) {
+            if (! is_array($relation) || ! array_is_list($relation)) {
+                throw new InvalidArgumentException('Please provide a list of tuples');
+            }
+
+            $tables = [];
+            foreach ($relation as $order) {
+                if (count($order) < 2) {
+                    throw new InvalidArgumentException('You need to provide at least $relation and $column');
+                }
+                if (is_string($order[0])) {
+                    $order[0] = $this->getModel()->{$order[0]}();
+                }
+                $table = $order[0]->getRelated()->getTable();
+
+                if (! in_array($table, $tables, true)) {
+                    $tables[] = $table;
+                    /** @var Builder<Model> $this */
+                    $this->join($order[0]->getRelated()->getTable(), $order[0]->getQualifiedParentKeyName(), $order[0]->getQualifiedForeignKeyName());
+                }
+
+                $this->orderBy(
+                    $order[0]->getRelated()->qualifyColumn($order[1]),
+                    $order[2] ?? 'asc',
+                );
+            }
+            return $this;
+        }
+
+        if (is_array($column)) {
+            /** @var Builder<Model> $this */
+            return $this->orderByRelation(array_map(fn ($column) => [$relation, $column, $direction], $column));
+        }
+
+        /** @var Builder<Model> $this */
+        $direction = $this->normalizeSortDirection($direction ?? 'asc');
+
+        if (is_string($relation)) {
+            $relation = $this->getModel()->{$relation}();
+        }
+
+        return $this
+            ->join($relation->getRelated()->getTable(), $relation->getQualifiedParentKeyName(), $relation->getQualifiedForeignKeyName())
+            ->orderBy(
+                $relation->getRelated()->qualifyColumn($column),
+                $direction,
+            );
+    }
+
+    /**
+     * @param  SortDirection|'asc'|'desc'  $direction
+     * @return 'asc'|'desc'
+     */
+    protected function normalizeSortDirection($direction)
+    {
+        return match (true) {
+            $direction instanceof SortDirection => match ($direction) {
+                SortDirection::Ascending => 'asc',
+                SortDirection::Descending => 'desc',
+            },
+            strtolower($direction) === 'asc' => 'asc',
+            strtolower($direction) === 'desc' => 'desc',
+            default => throw new InvalidArgumentException('Order direction must be a SortDirection, "asc" or "desc".'),
+        };
     }
 
     /**
