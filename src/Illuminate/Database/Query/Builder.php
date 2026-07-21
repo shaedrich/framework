@@ -4417,6 +4417,60 @@ class Builder implements BuilderContract
     }
 
     /**
+     * Update multiple rows independently with a single query.
+     */
+    public function updateMany(array $update, string $uniqueBy): int
+    {
+        if (! array_all($update, fn ($entry) => array_key_exists($uniqueBy, $entry))) {
+            throw new InvalidArgumentException('$uniqueBy must reference an entry of $update.');
+        }
+
+        if (array_any($update, fn ($entry) => array_is_list($entry))) {
+            throw new InvalidArgumentException('$update it must be associative.');
+        }
+        
+        [$unique, $rest] = array_reduce($update, function ($carry, $entry) use ($uniqueBy) {
+            $carry[1][] = [];
+            return array_reduce(array_keys($entry), function ($carry, $key) use ($entry, $uniqueBy) {
+                if ($key === $uniqueBy) {
+                    $carry[0][] = $entry[$key];
+                } else {
+                    $carry[1][count($carry[1]) - 1][$key] = $entry[$key];
+                }
+                return $carry;
+            }, $carry);
+        }, [[], []]);
+
+        $keys = array_keys($rest[0]);
+        $length = count($keys);
+        if (! array_all($rest, fn ($entry) => count($entry) === $length && array_diff($keys, array_keys($entry)) === [])) {
+            throw new InvalidArgumentException('The array of arrays must all have the same keys');
+        }
+
+        [$bindings, $sql] = array_reduce(
+            array_keys($keys),
+            fn ($carry, $idx) => array_reduce(
+                array_keys($unique),
+                fn ($carry, $uniqueIdx) => [
+                    [...$carry[0], $unique[$uniqueIdx], $rest[$uniqueIdx][$keys[$idx]]],
+                    $carry[1]. 'WHEN ? THEN ?' . ($uniqueIdx === ($length - 1) ? ' END' . ($idx === ($length -1) ? '' : ',') : '') . PHP_EOL ,
+                ],
+                [
+                    $carry[0],
+                    /** @var QueryBuilder $this */
+                    $carry[1] . sprintf('%s = CASE %s', $this->grammar->wrap($keys[$idx]), $this->grammar->wrap($uniqueBy)) . PHP_EOL,
+                ],
+            ),
+            [[], sprintf('UPDATE %s SET ', $this->grammar->wrapTable($this->from))],
+        );
+
+        return $this->connection->affectingStatement(
+            $sql . ' ' . $this->grammar->compileWheres($this),
+            [...$bindings, ...$this->bindings['where']],
+        );
+    }
+
+    /**
      * Increment a column's value by a given amount.
      *
      * @param  string  $column
