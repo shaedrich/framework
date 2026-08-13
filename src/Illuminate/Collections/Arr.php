@@ -161,6 +161,17 @@ class Arr
     }
 
     /**
+     * @param  string[]  $keys
+     * @param  array<int, mixed>  $values
+     */
+    public static function permute(array $keys, array $values) {
+        return Arr::crossJoin(...array_reduce(
+            $keys,
+            fn (array $carry, string $key) => $carry + [$key => $values], [],
+        ));
+    },
+
+    /**
      * Divide an array into two arrays. One with keys and the other with values.
      *
      * @template TKey of array-key
